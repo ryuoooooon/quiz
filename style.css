@@ -1,139 +1,205 @@
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,
+body{
+width:100%;
+height:100%;
+}
+
+body{
 background:#111;
-overflow:hidden;
-font-family:sans-serif;
 color:white;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+display:flex;
+flex-direction:column;
+overflow:hidden;
 }
 
-#enemyArea{
-height:20vh;
+/* =========================
+メニューバー
+========================= */
+
+#menuBar{
+height:50px;
+min-height:50px;
+background:#222;
 display:flex;
-justify-content:center;
+justify-content:space-between;
 align-items:center;
-gap:10px;
+padding:0 10px;
+border-bottom:1px solid #444;
 }
 
-.enemyCharacter{
-width:70px;
-height:70px;
-background:#333;
-border-radius:16px;
-display:flex;
-justify-content:center;
-align-items:center;
+#menuBar button{
+background:#444;
+color:white;
+border:none;
+border-radius:6px;
+padding:6px 12px;
 font-size:12px;
 }
 
-.enemyInfo{
+/* =========================
+CPUエリア
+========================= */
+
+#enemySection{
 display:flex;
-gap:8px;
+align-items:center;
+gap:10px;
+padding:6px 10px;
+min-height:90px;
 }
 
-#gameArea{
-height:80vh;
+.characterImage{
+width:72px;
+height:72px;
+object-fit:cover;
+object-position:center;
+background:#333;
+border-radius:12px;
+border:2px solid #555;
+flex-shrink:0;
+}
+
+/* =========================
+プレイヤーエリア
+========================= */
+
+#playerSection{
 display:flex;
-justify-content:flex-start;
 align-items:center;
-padding-left:5px;
+gap:10px;
+padding:6px 10px;
+min-height:90px;
+}
+
+/* =========================
+ゲージ
+========================= */
+
+.gaugeArea{
+flex:1;
+}
+
+.gaugeLabel{
+font-size:11px;
+margin-bottom:3px;
+}
+
+.gauge{
+width:100%;
+height:14px;
+background:#333;
+border-radius:999px;
+overflow:hidden;
+margin-bottom:8px;
+}
+
+.hpFill{
+width:100%;
+height:100%;
+background:#00dd66;
+transition:width .25s;
+}
+
+.attackFill{
+width:0%;
+height:100%;
+background:orange;
+transition:width .25s;
+}
+
+/* =========================
+盤面エリア
+========================= */
+
+#boardArea{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:5px;
+min-height:0;
 }
 
 #board{
 background:#222;
-border-radius:12px;
-touch-action:none;
+border-radius:14px;
+box-shadow:
+0 0 10px rgba(0,0,0,.5);
 }
 
-#playerPanel{
-width:100px;
-height:280px;
-margin-left:5px;
-position:relative;
-}
+/* =========================
+広告エリア
+========================= */
 
-.character{
-width:80px;
-height:80px;
-background:#333;
-border-radius:16px;
+#adArea{
+height:60px;
+min-height:60px;
+background:#222;
+border-top:1px solid #444;
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:12px;
-margin:auto;
+font-size:14px;
+color:#999;
 }
 
-.hpBar{
-width:18px;
-height:120px;
-background:#333;
-position:absolute;
-left:0;
-top:80px;
-overflow:hidden;
-border-radius:8px;
+/* =========================
+iPhone SE対応
+========================= */
+
+@media (max-width:390px){
+
+#menuBar{
+    height:44px;
+    min-height:44px;
+}
+#enemySection,
+#playerSection{
+    padding:4px 8px;
+    min-height:80px;
+}
+.characterImage{
+    width:60px;
+    height:60px;
+}
+.gauge{
+    height:12px;
+}
+#adArea{
+    height:50px;
+    min-height:50px;
 }
 
-.attackBar{
-width:18px;
-height:120px;
-background:#333;
-position:absolute;
-right:0;
-top:80px;
-overflow:hidden;
-border-radius:8px;
 }
 
-.enemyBar{
-position:relative;
-top:auto;
-left:auto;
-right:auto;
-}
-
-#playerHp,
-#enemyHp{
-width:100%;
-height:100%;
-background:#00ff66;
-transform-origin:bottom;
-}
-
-#playerAttack,
-#enemyAttack{
-width:100%;
-height:0%;
-background:orange;
-position:absolute;
-bottom:0;
-}
+/* =========================
+タブレット対応
+========================= */
 
 @media (min-width:768px){
 
-#playerPanel{
-width:140px;
-height:380px;
-margin-left:15px;
+.characterImage{
+    width:100px;
+    height:100px;
 }
-
-.character{
-width:120px;
-height:120px;
-font-size:16px;
+.gauge{
+    height:18px;
 }
-
-.hpBar,
-.attackBar{
-height:180px;
-width:25px;
-top:120px;
+.gaugeLabel{
+    font-size:14px;
 }
-
-.enemyCharacter{
-width:100px;
-height:100px;
-font-size:16px;
+#menuBar{
+    height:60px;
+}
+#adArea{
+    height:80px;
 }
 
 }
