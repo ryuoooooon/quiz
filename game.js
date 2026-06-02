@@ -1,178 +1,72 @@
-const canvas = document.getElementById("board");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("board");
+const ctx=canvas.getContext("2d");
 
-const SIZE = 5;
-const COLORS = ["#f44","#48f","#4d6","#fc3"];
+const SIZE=5;
+const COLORS=["#f44","#48f","#4d6","#fc3"];
 
-let board = [];
-let startX = -1;
-let startY = -1;
+let board=[];
+let CELL;
+let startX=-1,startY=-1;
 
 function resize(){
-    const boardSize = Math.min(window.innerWidth*0.7, window.innerHeight*0.4);
-    const CELL = Math.floor(boardSize / SIZE);
-
-    canvas.width = CELL * SIZE;
-    canvas.height = CELL * SIZE;
-
-    return CELL;
+const size=Math.min(innerWidth*0.7,innerHeight*0.4);
+CELL=Math.floor(size/SIZE);
+canvas.width=CELL*SIZE;
+canvas.height=CELL*SIZE;
 }
 
-let CELL = resize();
-window.addEventListener("resize", ()=> CELL = resize());
+window.addEventListener("resize",resize);
+resize();
 
-function initBoard(){
-    board = [];
-
-    for(let y=0;y<SIZE;y++){
-        let row=[];
-        for(let x=0;x<SIZE;x++){
-            row.push(Math.floor(Math.random()*COLORS.length));
-        }
-        board.push(row);
-    }
-
-    // 初期3連鎖削除
-    while(findMatches().length > 0){
-        applyMatches(findMatches());
-    }
+function init(){
+board=[];
+for(let y=0;y<SIZE;y++){
+let row=[];
+for(let x=0;x<SIZE;x++){
+row.push(Math.floor(Math.random()*COLORS.length));
+}
+board.push(row);
+}
 }
 
 function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    for(let y=0;y<SIZE;y++){
-        for(let x=0;x<SIZE;x++){
-            ctx.beginPath();
-            ctx.fillStyle = COLORS[board[y][x]];
-            ctx.arc(
-                x*CELL+CELL/2,
-                y*CELL+CELL/2,
-                CELL/2-3,
-                0,
-                Math.PI*2
-            );
-            ctx.fill();
-        }
-    }
+ctx.clearRect(0,0,canvas.width,canvas.height);
+for(let y=0;y<SIZE;y++){
+for(let x=0;x<SIZE;x++){
+ctx.fillStyle=COLORS[board[y][x]];
+ctx.beginPath();
+ctx.arc(x*CELL+CELL/2,y*CELL+CELL/2,CELL/2-3,0,Math.PI*2);
+ctx.fill();
 }
-
-function findMatches(){
-    let matches=[];
-
-    // 横
-    for(let y=0;y<SIZE;y++){
-        let count=1;
-        for(let x=1;x<SIZE;x++){
-            if(board[y][x]===board[y][x-1]){
-                count++;
-            }else{
-                if(count>=3){
-                    for(let k=0;k<count;k++){
-                        matches.push([x-1-k,y]);
-                    }
-                }
-                count=1;
-            }
-        }
-        if(count>=3){
-            for(let k=0;k<count;k++){
-                matches.push([SIZE-1-k,y]);
-            }
-        }
-    }
-
-    // 縦
-    for(let x=0;x<SIZE;x++){
-        let count=1;
-        for(let y=1;y<SIZE;y++){
-            if(board[y][x]===board[y-1][x]){
-                count++;
-            }else{
-                if(count>=3){
-                    for(let k=0;k<count;k++){
-                        matches.push([x,y-1-k]);
-                    }
-                }
-                count=1;
-            }
-        }
-        if(count>=3){
-            for(let k=0;k<count;k++){
-                matches.push([x,SIZE-1-k]);
-            }
-        }
-    }
-
-    return matches;
 }
-
-function applyMatches(matches){
-    const set = new Set(matches.map(m=>m[0]+","+m[1]));
-
-    set.forEach(s=>{
-        const [x,y]=s.split(",").map(Number);
-        board[y][x]=-1;
-    });
-
-    for(let x=0;x<SIZE;x++){
-        let col=[];
-
-        for(let y=SIZE-1;y>=0;y--){
-            if(board[y][x]!==-1) col.push(board[y][x]);
-        }
-
-        while(col.length<SIZE){
-            col.push(Math.floor(Math.random()*COLORS.length));
-        }
-
-        for(let y=SIZE-1;y>=0;y--){
-            board[y][x]=col[SIZE-1-y];
-        }
-    }
-}
-
-function resolve(){
-    const m = findMatches();
-    if(m.length===0) return;
-
-    applyMatches(m);
-    setTimeout(resolve,120);
 }
 
 function swap(x1,y1,x2,y2){
-    const t = board[y1][x1];
-    board[y1][x1]=board[y2][x2];
-    board[y2][x2]=t;
+let t=board[y1][x1];
+board[y1][x1]=board[y2][x2];
+board[y2][x2]=t;
 }
 
 canvas.addEventListener("pointerdown",e=>{
-    const r=canvas.getBoundingClientRect();
-    startX=Math.floor((e.clientX-r.left)/CELL);
-    startY=Math.floor((e.clientY-r.top)/CELL);
+const r=canvas.getBoundingClientRect();
+startX=Math.floor((e.clientX-r.left)/CELL);
+startY=Math.floor((e.clientY-r.top)/CELL);
 });
 
 canvas.addEventListener("pointerup",e=>{
-    const r=canvas.getBoundingClientRect();
-    const x=Math.floor((e.clientX-r.left)/CELL);
-    const y=Math.floor((e.clientY-r.top)/CELL);
+const r=canvas.getBoundingClientRect();
+let x=Math.floor((e.clientX-r.left)/CELL);
+let y=Math.floor((e.clientY-r.top)/CELL);
 
-    if(Math.abs(x-startX)+Math.abs(y-startY)!==1) return;
+if(Math.abs(x-startX)+Math.abs(y-startY)!==1)return;
 
-    swap(startX,startY,x,y);
-
-    if(findMatches().length===0){
-        swap(startX,startY,x,y);
-        return;
-    }
-
-    resolve();
+swap(startX,startY,x,y);
 });
 
 function loop(){
-    draw();
-    requestAnimationFrame(loop);
+draw();
+requestAnimationFrame(loop);
 }
 
-initBoard();
+init();
 loop();
