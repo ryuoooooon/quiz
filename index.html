@@ -4,42 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Battle Puzzle</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+<body>
 
-body {
-    background: #111;
-    color: white;
-    font-family: sans-serif;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
+<div id="menuBar">
+    <button>MENU</button>
+    <div>Battle Puzzle</div>
+    <button>SET</button>
+</div>
 
-#menuBar {
-    height: 50px;
-    background: #222;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    flex-shrink: 0;
-    border-bottom: 1px solid #444;
-}
+<div id="enemySection">
+    <img class="characterImage">
+    <div class="gaugeArea">
+        <div class="gauge"><div id="enemyHp" class="hpFill"></div></div>
+        <div class="gauge"><div id="enemyAttack" class="attackFill"></div></div>
+    </div>
+</div>
 
-#enemySection,
-#playerSection {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 10px;
-    min-height: 90px;
-}
+<div id="boardArea">
+    <canvas id="board"></canvas>
+</div>
 
-.characterImage {
-    width: 70px;
-    height: 70px;
-    background: #333;
-    border
+<div id="playerSection">
+    <img class="characterImage">
+    <div class="gaugeArea">
+        <div class="gauge"><div id="playerHp" class="hpFill"></div></div>
+        <div class="gauge"><div id="playerAttack" class="attackFill"></div></div>
+    </div>
+</div>
+
+<div id="adArea">AD</div>
+
+<script src="game.js"></script>
+
+</body>
+</html>
