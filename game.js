@@ -1,17 +1,24 @@
-const canvas = document.getElementById(“board”);
-const ctx = canvas.getContext(“2d”);
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
 
 const SIZE = 5;
 
-const boardSize = Math.min(
-window.innerWidth * 0.75,
-window.innerHeight * 0.35
-);
+function resizeBoard(){
 
-const CELL = Math.floor(boardSize / SIZE);
+    const boardSize = Math.min(
+        window.innerWidth * 0.72,
+        window.innerHeight * 0.38
+    );
 
-canvas.width = CELL * SIZE;
-canvas.height = CELL * SIZE;
+    const CELL = Math.floor(boardSize / SIZE);
+
+    canvas.width = CELL * SIZE;
+    canvas.height = CELL * SIZE;
+
+    return CELL;
+}
+
+let CELL = resizeBoard();
 
 const COLORS = [
 “#ff4444”,
