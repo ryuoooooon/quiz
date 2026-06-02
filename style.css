@@ -131,4 +131,47 @@ body {
 /* iPhone SE対応 */
 @media (max-width: 390px) {
   #menuBar {
-    height: 44
+    height: 44px;
+    min-height: 44px;
+  }
+
+  #enemySection, 
+  #playerSection {
+    padding: 4px 8px;
+    min-height: 80px;
+  }
+
+  .characterImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gauge {
+    height: 12px;
+  }
+
+  #adArea {
+    height: 50px;
+    min-height: 50px;
+  }
+}
+
+/* タブレット対応 */
+@media (min-width: 768px) {
+  .characterImage {
+    width: 100px;
+    height: 100px;
+  }
+
+  .gauge {
+    height: 18px;
+  }
+
+  #menuBar {
+    height: 60px;
+  }
+
+  #adArea {
+    height: 80px;
+  }
+}
