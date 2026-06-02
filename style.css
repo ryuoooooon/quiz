@@ -1,213 +1,134 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
 }
 
-html,
-body{
-width:100%;
-height:100%;
+html, body {
+  width: 100%;
+  height: 100%;
 }
 
-body{
-background:#111;
-color:white;
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-display:flex;
-flex-direction:column;
-overflow:hidden;
+body {
+  background: #111;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-/* =========================
-メニューバー
-========================= */
-
-#menuBar{
-height:50px;
-min-height:50px;
-background:#222;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 10px;
-border-bottom:1px solid #444;
+/* ========== メニューバー ========== */
+#menuBar {
+  height: 50px;
+  min-height: 50px;
+  background: #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid #444;
 }
 
-#menuBar button{
-background:#444;
-color:white;
-border:none;
-border-radius:6px;
-padding:6px 12px;
-font-size:12px;
+#menuBar button {
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
 }
 
-/* =========================
-CPUエリア
-========================= */
-
-#enemySection{
-display:flex;
-align-items:center;
-gap:10px;
-padding:6px 10px;
-min-height:90px;
+/* ========== CPUエリア ========== */
+#enemySection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
 }
 
-.characterImage{
-width:72px;
-height:72px;
-object-fit:cover;
-object-position:center;
-background:#333;
-border-radius:12px;
-border:2px solid #555;
-flex-shrink:0;
+.characterImage {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  object-position: center;
+  background: #333;
+  border-radius: 12px;
+  border: 2px solid #555;
+  flex-shrink: 0;
 }
 
-/* =========================
-プレイヤーエリア
-========================= */
-
-#playerSection{
-display:flex;
-align-items:center;
-gap:10px;
-padding:6px 10px;
-min-height:90px;
+/* ========== プレイヤーエリア ========== */
+#playerSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
 }
 
-/* =========================
-ゲージ
-========================= */
-
-.gaugeArea{
-flex:1;
+/* ========== ゲージ ========== */
+.gaugeArea {
+  flex: 1;
 }
 
-.gaugeLabel{
-font-size:11px;
-margin-bottom:3px;
+.gauge {
+  width: 100%;
+  height: 14px;
+  background: #333;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
 }
 
-.gauge{
-width:100%;
-height:14px;
-background:#333;
-border-radius:999px;
-overflow:hidden;
-margin-bottom:8px;
+.hpFill {
+  width: 100%;
+  height: 100%;
+  background: #00dd66;
+  transition: width 0.25s;
 }
 
-.hpFill{
-width:100%;
-height:100%;
-background:#00dd66;
-transition:width .25s;
+.attackFill {
+  width: 0%;
+  height: 100%;
+  background: orange;
+  transition: width 0.25s;
 }
 
-.attackFill{
-width:0%;
-height:100%;
-background:orange;
-transition:width .25s;
+/* ========== 盤面エリア ========== */
+#boardArea {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  min-height: 0;
+  overflow: hidden;
 }
 
-/* =========================
-盤面エリア
-========================= */
-
-#boardArea{
-    flex:1;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:5px;
-    min-height:0;
-    overflow:hidden;
+#board {
+  background: #222;
+  border-radius: 14px;
+  touch-action: none;
+  width: auto !important; 
+  height: auto !important; 
+  max-width: none;
+  max-height: none;
 }
 
-#board{
-    background:#222;
-    border-radius:14px;
-
-    display:block;
-
-    /* ★重要：CSSサイズをJSに完全委任 */
-    width:auto !important;
-    height:auto !important;
-
-    max-width:none;
-    max-height:none;
+/* ========== 広告エリア ========== */
+#adArea {
+  height: 60px;
+  min-height: 60px;
+  background: #222;
+  border-top: 1px solid #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
 }
 
-/* =========================
-広告エリア
-========================= */
-
-#adArea{
-height:60px;
-min-height:60px;
-background:#222;
-border-top:1px solid #444;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:14px;
-color:#999;
-}
-
-/* =========================
-iPhone SE対応
-========================= */
-
-@media (max-width:390px){
-
-#menuBar{
-    height:44px;
-    min-height:44px;
-}
-#enemySection,
-#playerSection{
-    padding:4px 8px;
-    min-height:80px;
-}
-.characterImage{
-    width:60px;
-    height:60px;
-}
-.gauge{
-    height:12px;
-}
-#adArea{
-    height:50px;
-    min-height:50px;
-}
-
-}
-
-/* =========================
-タブレット対応
-========================= */
-
-@media (min-width:768px){
-
-.characterImage{
-    width:100px;
-    height:100px;
-}
-.gauge{
-    height:18px;
-}
-.gaugeLabel{
-    font-size:14px;
-}
-#menuBar{
-    height:60px;
-}
-#adArea{
-    height:80px;
-}
-
-}
+/* iPhone SE対応 */
+@media (max-width: 390px) {
+  #menuBar {
+    height: 44
