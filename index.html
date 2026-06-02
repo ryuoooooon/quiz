@@ -118,7 +118,9 @@ body {
 
     <button class="btn next" onclick="nextQuestion()">次へ</button>
 
-　　　<button class="btn next" onclick="backToStart()">スタートに戻る</button>
+    <button class="btn" onclick="backToStart()">
+      スタート画面へ戻る
+    </button>
 
   </div>
 
@@ -150,24 +152,29 @@ function startQuiz() {
 
 function load() {
   const q = quiz[index];
+
   document.getElementById("question").textContent = q.q;
 
   const area = document.getElementById("choices");
   area.innerHTML = "";
+
   document.getElementById("result").textContent = "";
 
   q.c.forEach((text, i) => {
     const btn = document.createElement("button");
+
     btn.className = "btn";
     btn.textContent = text;
 
     btn.onclick = () => {
       if (i === q.a) {
         btn.classList.add("correct");
-        document.getElementById("result").textContent = "正解： " + q.exp;
+        document.getElementById("result").textContent =
+          "正解： " + q.exp;
       } else {
         btn.classList.add("wrong");
-        document.getElementById("result").textContent = "不正解： " + q.exp;
+        document.getElementById("result").textContent =
+          "不正解： " + q.exp;
       }
     };
 
@@ -179,14 +186,16 @@ function nextQuestion() {
   index = (index + 1) % quiz.length;
   load();
 }
-</script>
 
 function backToStart() {
   document.getElementById("quiz").style.display = "none";
   document.getElementById("start").style.display = "block";
 
+  document.getElementById("result").textContent = "";
+
   index = 0;
 }
+</script>
 
 <script>
 if ("serviceWorker" in navigator) {
