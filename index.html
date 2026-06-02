@@ -2,206 +2,53 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>X線作業主任者クイズ</title>
-
-<link rel="manifest" href="manifest.json">
-
-<style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  background: #fff;
-  color: #111;
-}
-
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-/* スタート画面 */
-.start-screen {
-  text-align: center;
-  margin-top: 80px;
-}
-
-.title {
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.subtitle {
-  color: #666;
-  margin-top: 10px;
-}
-
-.start-btn {
-  margin-top: 40px;
-  padding: 16px;
-  width: 100%;
-  font-size: 18px;
-  border: none;
-  border-radius: 14px;
-  background: #007aff;
-  color: white;
-}
-
-/* クイズカード */
-.card {
-  display: none;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  background: #fff;
-}
-
-.question {
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-
-.btn {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: #fafafa;
-  font-size: 16px;
-}
-
-.correct {
-  background: #e6f7ee !important;
-  border-color: #34c759 !important;
-}
-
-.wrong {
-  background: #ffecec !important;
-  border-color: #ff3b30 !important;
-}
-
-.result {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555;
-  min-height: 20px;
-}
-
-.next {
-  margin-top: 20px;
-  background: #007aff;
-  color: white;
-  border: none;
-}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Battle Puzzle</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<div id="enemyArea">
 
-  <!-- スタート画面 -->
-  <div id="start" class="start-screen">
-    <div class="title">X線作業主任者</div>
-    <div class="subtitle">学習クイズアプリ</div>
-    <button class="start-btn" onclick="startQuiz()">開始する</button>
-  </div>
+    <div class="enemyInfo">
+        <div class="hpBar">
+            <div id="enemyHp"></div>
+        </div>
 
-  <!-- クイズ画面 -->
-  <div id="quiz" class="card">
+        <div class="attackBar">
+            <div id="enemyAttack"></div>
+        </div>
+    </div>
 
-    <div class="question" id="question"></div>
-    <div id="choices"></div>
-    <div class="result" id="result"></div>
-
-    <button class="btn next" onclick="nextQuestion()">次へ</button>
-
-    <button class="btn" onclick="backToStart()">
-      スタート画面へ戻る
-    </button>
-
-  </div>
+    <div class="enemyCharacter">
+        CPU
+    </div>
 
 </div>
 
-<script>
-const quiz = [
-  {
-    q: "X線は何に分類されるか",
-    c: ["電磁波", "粒子線", "音波", "熱波"],
-    a: 0,
-    exp: "X線は電磁波に分類される。"
-  },
-  {
-    q: "半価層の定義として正しいものはどれか",
-    c: ["2倍になる厚さ", "1/2になる厚さ", "距離", "時間"],
-    a: 1,
-    exp: "放射線強度を半分にする物質の厚さ。"
-  }
-];
+<div id="gameArea">
 
-let index = 0;
+    <canvas id="board"></canvas>
 
-function startQuiz() {
-  document.getElementById("start").style.display = "none";
-  document.getElementById("quiz").style.display = "block";
-  load();
-}
+    <div id="playerPanel">
 
-function load() {
-  const q = quiz[index];
+        <div class="character">
+            PLAYER
+        </div>
 
-  document.getElementById("question").textContent = q.q;
+        <div class="hpBar">
+            <div id="playerHp"></div>
+        </div>
 
-  const area = document.getElementById("choices");
-  area.innerHTML = "";
+        <div class="attackBar">
+            <div id="playerAttack"></div>
+        </div>
 
-  document.getElementById("result").textContent = "";
+    </div>
 
-  q.c.forEach((text, i) => {
-    const btn = document.createElement("button");
+</div>
 
-    btn.className = "btn";
-    btn.textContent = text;
-
-    btn.onclick = () => {
-      if (i === q.a) {
-        btn.classList.add("correct");
-        document.getElementById("result").textContent =
-          "正解： " + q.exp;
-      } else {
-        btn.classList.add("wrong");
-        document.getElementById("result").textContent =
-          "不正解： " + q.exp;
-      }
-    };
-
-    area.appendChild(btn);
-  });
-}
-
-function nextQuestion() {
-  index = (index + 1) % quiz.length;
-  load();
-}
-
-function backToStart() {
-  document.getElementById("quiz").style.display = "none";
-  document.getElementById("start").style.display = "block";
-
-  document.getElementById("result").textContent = "";
-
-  index = 0;
-}
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
-</script>
-
+<script src="game.js"></script>
 </body>
 </html>
