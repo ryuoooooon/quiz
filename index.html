@@ -118,9 +118,9 @@ body {
 
     <button class="btn next" onclick="nextQuestion()">次へ</button>
 
-  </div>
+　　　<button class="btn next" onclick="backToStart()">スタートに戻る</button>
 
-<button class="btn next" onclick="backToStart()">スタートに戻る</button>
+  </div>
 
 </div>
 
@@ -180,6 +180,13 @@ function nextQuestion() {
   load();
 }
 </script>
+
+function backToStart() {
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("start").style.display = "block";
+
+  index = 0;
+}
 
 <script>
 if ("serviceWorker" in navigator) {
