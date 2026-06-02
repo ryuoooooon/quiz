@@ -6,47 +6,40 @@
 <title>Battle Puzzle</title>
 
 <style>
-body{margin:0;background:#111;color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
-#menuBar{height:50px;background:#222;display:flex;justify-content:space-between;align-items:center;padding:0 10px;}
-#enemySection,#playerSection{display:flex;align-items:center;gap:10px;padding:6px 10px;}
-.characterImage{width:70px;height:70px;background:#333;border-radius:10px;}
-#boardArea{flex:1;display:flex;justify-content:center;align-items:center;}
-#board{background:#222;border-radius:12px;}
-#adArea{height:60px;background:#222;display:flex;justify-content:center;align-items:center;}
-</style>
-</head>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-<body>
+body {
+    background: #111;
+    color: white;
+    font-family: sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
-<div id="menuBar">
-<button>MENU</button>
-<div>Battle Puzzle</div>
-<button>SET</button>
-</div>
+#menuBar {
+    height: 50px;
+    background: #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #444;
+}
 
-<div id="enemySection">
-<img class="characterImage">
-<div>
-<div id="enemyHp"></div>
-<div id="enemyAttack"></div>
-</div>
-</div>
+#enemySection,
+#playerSection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    min-height: 90px;
+}
 
-<div id="boardArea">
-<canvas id="board"></canvas>
-</div>
-
-<div id="playerSection">
-<img class="characterImage">
-<div>
-<div id="playerHp"></div>
-<div id="playerAttack"></div>
-</div>
-</div>
-
-<div id="adArea">AD</div>
-
-<script src="game.js"></script>
-
-</body>
-</html>
+.characterImage {
+    width: 70px;
+    height: 70px;
+    background: #333;
+    border
