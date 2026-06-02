@@ -9,7 +9,7 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  background: #ffffff;
+  background: #fff;
   color: #111;
 }
 
@@ -19,19 +19,36 @@ body {
   padding: 40px 20px;
 }
 
+/* スタート画面 */
+.start-screen {
+  text-align: center;
+  margin-top: 80px;
+}
+
 .title {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
-  margin-bottom: 10px;
 }
 
 .subtitle {
-  font-size: 14px;
   color: #666;
-  margin-bottom: 30px;
+  margin-top: 10px;
 }
 
+.start-btn {
+  margin-top: 40px;
+  padding: 16px;
+  width: 100%;
+  font-size: 18px;
+  border: none;
+  border-radius: 14px;
+  background: #007aff;
+  color: white;
+}
+
+/* クイズカード */
 .card {
+  display: none;
   border-radius: 20px;
   padding: 24px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -40,12 +57,10 @@ body {
 
 .question {
   font-size: 20px;
-  line-height: 1.6;
   margin-bottom: 20px;
 }
 
 .btn {
-  display: block;
   width: 100%;
   padding: 14px;
   margin: 10px 0;
@@ -53,15 +68,6 @@ body {
   border: 1px solid #ddd;
   background: #fafafa;
   font-size: 16px;
-  transition: 0.2s;
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn:hover {
-  background: #f0f0f0;
 }
 
 .correct {
@@ -75,14 +81,14 @@ body {
 }
 
 .result {
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 14px;
   color: #555;
   min-height: 20px;
 }
 
 .next {
-  margin-top: 25px;
+  margin-top: 20px;
   background: #007aff;
   color: white;
   border: none;
@@ -94,20 +100,24 @@ body {
 
 <div class="container">
 
-  <div class="title">X線作業主任者</div>
-  <div class="subtitle">学習クイズアプリ</div>
+  <!-- スタート画面 -->
+  <div id="start" class="start-screen">
+    <div class="title">X線作業主任者</div>
+    <div class="subtitle">学習クイズアプリ</div>
+    <button class="start-btn" onclick="startQuiz()">開始する</button>
+  </div>
 
-  <div class="card">
+  <!-- クイズ画面 -->
+  <div id="quiz" class="card">
 
     <div class="question" id="question"></div>
-
     <div id="choices"></div>
-
     <div class="result" id="result"></div>
 
     <button class="btn next" onclick="nextQuestion()">次へ</button>
 
   </div>
+
 </div>
 
 <script>
@@ -120,13 +130,19 @@ const quiz = [
   },
   {
     q: "半価層の定義として正しいものはどれか",
-    c: ["線量が2倍になる厚さ", "線量が1/2になる厚さ", "距離", "時間"],
+    c: ["2倍になる厚さ", "1/2になる厚さ", "距離", "時間"],
     a: 1,
     exp: "放射線強度を半分にする物質の厚さ。"
   }
 ];
 
 let index = 0;
+
+function startQuiz() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  load();
+}
 
 function load() {
   const q = quiz[index];
@@ -159,8 +175,6 @@ function nextQuestion() {
   index = (index + 1) % quiz.length;
   load();
 }
-
-load();
 </script>
 
 </body>
