@@ -1,246 +1,283 @@
-const canvas=document.getElementById("board");
-const ctx=canvas.getContext("2d");
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
 
-const SIZE=6;
-const COLORS=[
-"#ff4444",
-"#4488ff",
-"#44dd66",
-"#ffcc33"
+const SIZE = 6;
+
+const boardSize = Math.min(
+    window.innerWidth * 0.55,
+    window.innerHeight * 0.45
+);
+
+const CELL = Math.floor(boardSize / SIZE);
+
+canvas.width = CELL * SIZE;
+canvas.height = CELL * SIZE;
+
+const COLORS = [
+    "#ff4444",
+    "#4488ff",
+    "#44dd66",
+    "#ffcc33"
 ];
 
-const CELL=70;
+let board = [];
 
-canvas.width=SIZE*CELL;
-canvas.height=SIZE*CELL;
+let playerHP = 100;
+let enemyHP = 100;
 
-let board=[];
-
-let playerHP=100;
-let enemyHP=100;
-
-let playerGauge=0;
-let enemyGauge=0;
+let playerGauge = 0;
+let enemyGauge = 0;
 
 function createBoard(){
 
-board=[];
+    board = [];
 
-for(let y=0;y<SIZE;y++){
+    for(let y=0;y<SIZE;y++){
 
-let row=[];
+        let row=[];
 
-for(let x=0;x<SIZE;x++){
+        for(let x=0;x<SIZE;x++){
 
-row.push(
-Math.floor(Math.random()*4)
-);
+            row.push(
+                Math.floor(Math.random()*4)
+            );
 
-}
+        }
 
-board.push(row);
+        board.push(row);
 
-}
+    }
 
 }
 
 function draw(){
 
-ctx.clearRect(
-0,0,
-canvas.width,
-canvas.height
-);
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
-for(let y=0;y<SIZE;y++){
+    for(let y=0;y<SIZE;y++){
 
-for(let x=0;x<SIZE;x++){
+        for(let x=0;x<SIZE;x++){
 
-ctx.beginPath();
+            ctx.beginPath();
 
-ctx.fillStyle=
-COLORS[board[y][x]];
+            ctx.fillStyle=
+                COLORS[
+                    board[y][x]
+                ];
 
-ctx.arc(
-x*CELL+CELL/2,
-y*CELL+CELL/2,
-CELL/2-5,
-0,
-Math.PI*2
-);
+            ctx.arc(
+                x*CELL+CELL/2,
+                y*CELL+CELL/2,
+                CELL/2-3,
+                0,
+                Math.PI*2
+            );
 
-ctx.fill();
+            ctx.fill();
 
-}
+        }
 
-}
+    }
 
 }
 
 function findMatches(){
 
-let matches=[];
+    let matches=[];
 
-for(let y=0;y<SIZE;y++){
+    for(let y=0;y<SIZE;y++){
 
-let count=1;
+        let count=1;
 
-for(let x=1;x<SIZE;x++){
+        for(let x=1;x<SIZE;x++){
 
-if(board[y][x]===board[y][x-1]){
+            if(
+                board[y][x]===
+                board[y][x-1]
+            ){
 
-count++;
+                count++;
 
-}else{
+            }else{
 
-if(count>=3){
+                if(count>=3){
 
-for(let k=0;k<count;k++){
+                    for(let k=0;k<count;k++){
 
-matches.push([
-x-1-k,
-y
-]);
+                        matches.push([
+                            x-1-k,
+                            y
+                        ]);
 
-}
+                    }
 
-}
+                }
 
-count=1;
+                count=1;
 
-}
+            }
 
-}
+        }
 
-if(count>=3){
+        if(count>=3){
 
-for(let k=0;k<count;k++){
+            for(let k=0;k<count;k++){
 
-matches.push([
-SIZE-1-k,
-y
-]);
+                matches.push([
+                    SIZE-1-k,
+                    y
+                ]);
 
-}
+            }
 
-}
+        }
 
-}
+    }
 
-for(let x=0;x<SIZE;x++){
+    for(let x=0;x<SIZE;x++){
 
-let count=1;
+        let count=1;
 
-for(let y=1;y<SIZE;y++){
+        for(let y=1;y<SIZE;y++){
 
-if(board[y][x]===board[y-1][x]){
+            if(
+                board[y][x]===
+                board[y-1][x]
+            ){
 
-count++;
+                count++;
 
-}else{
+            }else{
 
-if(count>=3){
+                if(count>=3){
 
-for(let k=0;k<count;k++){
+                    for(let k=0;k<count;k++){
 
-matches.push([
-x,
-y-1-k
-]);
+                        matches.push([
+                            x,
+                            y-1-k
+                        ]);
 
-}
+                    }
 
-}
+                }
 
-count=1;
+                count=1;
 
-}
+            }
 
-}
+        }
 
-if(count>=3){
+        if(count>=3){
 
-for(let k=0;k<count;k++){
+            for(let k=0;k<count;k++){
 
-matches.push([
-x,
-SIZE-1-k
-]);
+                matches.push([
+                    x,
+                    SIZE-1-k
+                ]);
 
-}
+            }
 
-}
+        }
 
-}
+    }
 
-return matches;
+    return matches;
+
 }
 
 function removeMatches(matches){
 
-matches.forEach(m=>{
+    matches.forEach(m=>{
 
-board[m[1]][m[0]]=-1;
+        board[m[1]][m[0]]=-1;
 
-});
+    });
 
-playerGauge+=matches.length;
+    playerGauge=
+        Math.min(
+            100,
+            playerGauge+matches.length
+        );
 
-enemyHP-=Math.floor(
-matches.length/3
-);
+    enemyHP=
+        Math.max(
+            0,
+            enemyHP-Math.floor(matches.length/3)
+        );
 
 }
 
 function dropPieces(){
 
-for(let x=0;x<SIZE;x++){
+    for(let x=0;x<SIZE;x++){
 
-let col=[];
+        let col=[];
 
-for(let y=SIZE-1;y>=0;y--){
+        for(let y=SIZE-1;y>=0;y--){
 
-if(board[y][x]!==-1){
+            if(
+                board[y][x]!==-1
+            ){
 
-col.push(board[y][x]);
+                col.push(
+                    board[y][x]
+                );
 
-}
+            }
 
-}
+        }
 
-while(col.length<SIZE){
+        while(
+            col.length<SIZE
+        ){
 
-col.push(
-Math.floor(Math.random()*4)
-);
+            col.push(
+                Math.floor(
+                    Math.random()*4
+                )
+            );
 
-}
+        }
 
-for(let y=SIZE-1;y>=0;y--){
+        for(let y=SIZE-1;y>=0;y--){
 
-board[y][x]=
-col[SIZE-1-y];
+            board[y][x]=
+                col[
+                    SIZE-1-y
+                ];
 
-}
+        }
 
-}
+    }
 
 }
 
 function resolveBoard(){
 
-let matches=findMatches();
+    let matches=
+        findMatches();
 
-if(matches.length===0){
+    if(matches.length===0){
 
-return;
-}
+        return;
 
-removeMatches(matches);
+    }
 
-dropPieces();
+    removeMatches(matches);
 
-setTimeout(resolveBoard,200);
+    dropPieces();
+
+    setTimeout(
+        resolveBoard,
+        200
+    );
 
 }
 
@@ -248,101 +285,118 @@ let startX;
 let startY;
 
 canvas.addEventListener(
-"pointerdown",
-e=>{
+    "pointerdown",
+    e=>{
 
-const rect=
-canvas.getBoundingClientRect();
+        const rect=
+            canvas.getBoundingClientRect();
 
-startX=
-Math.floor(
-(e.clientX-rect.left)/CELL
-);
+        startX=
+            Math.floor(
+                (e.clientX-rect.left)
+                /CELL
+            );
 
-startY=
-Math.floor(
-(e.clientY-rect.top)/CELL
-);
+        startY=
+            Math.floor(
+                (e.clientY-rect.top)
+                /CELL
+            );
 
-}
+    }
 );
 
 canvas.addEventListener(
-"pointerup",
-e=>{
+    "pointerup",
+    e=>{
 
-const rect=
-canvas.getBoundingClientRect();
+        const rect=
+            canvas.getBoundingClientRect();
 
-let endX=
-Math.floor(
-(e.clientX-rect.left)/CELL
-);
+        let endX=
+            Math.floor(
+                (e.clientX-rect.left)
+                /CELL
+            );
 
-let endY=
-Math.floor(
-(e.clientY-rect.top)/CELL
-);
+        let endY=
+            Math.floor(
+                (e.clientY-rect.top)
+                /CELL
+            );
 
-if(
-Math.abs(endX-startX)+
-Math.abs(endY-startY)!==1
-)return;
+        if(
+            Math.abs(endX-startX)+
+            Math.abs(endY-startY)!==1
+        ){
+            return;
+        }
 
-let temp=
-board[startY][startX];
+        let temp=
+            board[startY][startX];
 
-board[startY][startX]=
-board[endY][endX];
+        board[startY][startX]=
+            board[endY][endX];
 
-board[endY][endX]=temp;
+        board[endY][endX]=
+            temp;
 
-let matches=
-findMatches();
+        let matches=
+            findMatches();
 
-if(matches.length===0){
+        if(matches.length===0){
 
-temp=
-board[startY][startX];
+            temp=
+                board[startY][startX];
 
-board[startY][startX]=
-board[endY][endX];
+            board[startY][startX]=
+                board[endY][endX];
 
-board[endY][endX]=temp;
+            board[endY][endX]=
+                temp;
 
-return;
-}
+            return;
 
-resolveBoard();
+        }
 
-}
+        resolveBoard();
+
+    }
 );
 
 function updateBars(){
 
-document.getElementById(
-"playerHp"
-).style.transform=
-`scaleY(${playerHP/100})`;
+    document
+    .getElementById("playerHp")
+    .style.transform=
+        `scaleY(${playerHP/100})`;
 
-document.getElementById(
-"enemyHp"
-).style.transform=
-`scaleY(${enemyHP/100})`;
+    document
+    .getElementById("enemyHp")
+    .style.transform=
+        `scaleY(${enemyHP/100})`;
 
-document.getElementById(
-"playerAttack"
-).style.height=
-`${playerGauge}%`;
+    document
+    .getElementById("playerAttack")
+    .style.height=
+        `${playerGauge}%`;
+
+    document
+    .getElementById("enemyAttack")
+    .style.height=
+        `${enemyGauge}%`;
+
 }
 
 function loop(){
 
-draw();
+    draw();
 
-updateBars();
+    updateBars();
 
-requestAnimationFrame(loop);
+    requestAnimationFrame(
+        loop
+    );
 
 }
 
