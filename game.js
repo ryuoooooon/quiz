@@ -1,12 +1,12 @@
 const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
 
-const SIZE = 5;
-const COLORS = ["#f44", "#48f", "#4d6", "#fc3"];
+const SIZE = 5; // ボードの行列サイズ
+const COLORS = ["#f44", "#48f", "#4d6", "#fc3"]; // ボールの色
 
-let board = [];
-let CELL; // 1セルの幅
-let startX = -1, startY = -1;
+let board = []; // ボードの初期状態
+let CELL; // 1セルの大きさ
+let startX = -1, startY = -1; // スワイプ開始位置
 
 function resize() {
     const size = Math.min(innerWidth * 0.7, innerHeight * 0.4);
@@ -18,6 +18,7 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
+// ボードを初期化
 function initBoard() {
     board = [];
     for (let y = 0; y < SIZE; y++) {
@@ -28,12 +29,13 @@ function initBoard() {
         board.push(row);
     }
 
-    // 初期化時に3つ揃いを削除
+    // 初期に3つ消える箇所があれば再生成
     while (findMatches().length > 0) {
         applyMatches(findMatches());
     }
 }
 
+// 描画
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -53,7 +55,7 @@ function draw() {
     }
 }
 
-// 揃ったマッチを探す
+// 揃った箇所を探す関数
 function findMatches() {
     let matches = [];
 
@@ -104,56 +106,35 @@ function findMatches() {
     return matches;
 }
 
-// 揃った球を削除
+// 揃った箇所を削除して新たなボールを補充
 function applyMatches(matches) {
     const set = new Set(matches.map(m => m[0] + "," + m[1]));
 
-    // 揃ったマスを空にする
     set.forEach(s => {
         const [x, y] = s.split(",").map(Number);
-        board[y][x] = -1;
+        board[y][x] = -1; // 消された箇所は -1 に
     });
 
-    // 上に球を詰める
     for (let x = 0; x < SIZE; x++) {
         let col = [];
 
-        // 消えてない球を下から収集
         for (let y = SIZE - 1; y >= 0; y--) {
             if (board[y][x] !== -1) {
-                col.push(board[y][x]);
+                col.push(board[y][x]); // 消されていないボールを収集
             }
         }
 
-        // 上部に新しい球を生成
         while (col.length < SIZE) {
-            col.push(Math.floor(Math.random() * COLORS.length));
+            col.push(Math.floor(Math.random() * COLORS.length)); // 上に新しいボールを追加
         }
 
-        // ボードに戻す
         for (let y = SIZE - 1; y >= 0; y--) {
             board[y][x] = col[SIZE - 1 - y];
         }
     }
 }
 
-// 連鎖を処理
-function resolve() {
-    const matches = findMatches();
-    if (matches.length === 0) return; // もう連鎖なし
-
-    applyMatches(matches);
-    setTimeout(resolve, 150); // 再帰的に連鎖を処理
-}
-
-// ボールの位置をスワップ
-function swap(x1, y1, x2, y2) {
-    const temp = board[y1][x1];
-    board[y1][x1] = board[y2][x2];
-    board[y2][x2] = temp;
-}
-
-// スワイプ操作の処理
+// スワイプのロジック
 canvas.addEventListener("pointerdown", e => {
     const r = canvas.getBoundingClientRect();
     startX = Math.floor((e.clientX - r.left) / CELL);
@@ -162,23 +143,44 @@ canvas.addEventListener("pointerdown", e => {
 
 canvas.addEventListener("pointerup", e => {
     const r = canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - r.left) / CELL);
-    const y = Math.floor((e.clientY - r.top) / CELL);
+    const endX = Math.floor((e.clientX - r.left) / CELL);
+    const endY = Math.floor((e.clientY - r.top) / CELL);
 
-    // 隣接するセルか判定
-    if (Math.abs(x - startX) + Math.abs(y - startY) !== 1) return;
+    if (startX === -1 || startY === -1) return;
 
-    // 入れ替え処理
-    swap(startX, startY, x, y);
+    // 隣接しているセルだけスワイプ可能
+    const dx = Math.abs(endX - startX);
+    const dy = Math.abs(endY - startY);
+    if (dx + dy !== 1) return;
 
-    // 揃いが無ければ元に戻す
+    // スワップ処理
+    swap(startX, startY, endX, endY);
+
     if (findMatches().length === 0) {
-        swap(startX, startY, x, y);
-        return;
+        swap(startX, startY, endX, endY); // 揃いが無い場合は元に戻す
+    } else {
+        resolve(); // 揃ったら連鎖を処理
     }
 
-    resolve(); // 連鎖処理開始
+    startX = -1;
+    startY = -1;
 });
+
+// 指定した2つの位置をスワップ
+function swap(x1, y1, x2, y2) {
+    const temp = board[y1][x1];
+    board[y1][x1] = board[y2][x2];
+    board[y2][x2] = temp;
+}
+
+// 連鎖を再帰的に処理
+function resolve() {
+    const matches = findMatches();
+    if (matches.length === 0) return;
+
+    applyMatches(matches);
+    setTimeout(resolve, 150); // 150msごとに連鎖処理
+}
 
 // ゲームループ
 function loop() {
