@@ -3,9 +3,11 @@ const ctx = canvas.getContext("2d");
 
 const SIZE = 6;
 
+const uiWidth = 110;
+
 const boardSize = Math.min(
-    window.innerWidth * 0.55,
-    window.innerHeight * 0.45
+    window.innerWidth - uiWidth - 20,
+    window.innerHeight * 0.40
 );
 
 const CELL = Math.floor(boardSize / SIZE);
