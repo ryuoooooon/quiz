@@ -6,83 +6,13 @@
 <title>Battle Puzzle</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-background:#111;
-color:white;
-font-family:sans-serif;
-height:100vh;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-#menuBar{
-height:50px;
-background:#222;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 10px;
-flex-shrink:0;
-}
-
-#enemySection,
-#playerSection{
-display:flex;
-align-items:center;
-gap:10px;
-padding:6px 10px;
-}
-
-.characterImage{
-width:70px;
-height:70px;
-background:#333;
-border-radius:10px;
-}
-
-.gaugeArea{flex:1;}
-
-.gauge{
-width:100%;
-height:12px;
-background:#333;
-margin-bottom:6px;
-}
-
-.hpFill{
-width:100%;
-height:100%;
-background:#00ff66;
-}
-
-.attackFill{
-width:0%;
-height:100%;
-background:orange;
-}
-
-#boardArea{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-#board{
-background:#222;
-border-radius:12px;
-touch-action:none;
-}
-#adArea{
-height:60px;
-background:#222;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+body{margin:0;background:#111;color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+#menuBar{height:50px;background:#222;display:flex;justify-content:space-between;align-items:center;padding:0 10px;}
+#enemySection,#playerSection{display:flex;align-items:center;gap:10px;padding:6px 10px;}
+.characterImage{width:70px;height:70px;background:#333;border-radius:10px;}
+#boardArea{flex:1;display:flex;justify-content:center;align-items:center;}
+#board{background:#222;border-radius:12px;}
+#adArea{height:60px;background:#222;display:flex;justify-content:center;align-items:center;}
 </style>
 </head>
 
@@ -96,9 +26,9 @@ align-items:center;
 
 <div id="enemySection">
 <img class="characterImage">
-<div class="gaugeArea">
-<div class="gauge"><div id="enemyHp" class="hpFill"></div></div>
-<div class="gauge"><div id="enemyAttack" class="attackFill"></div></div>
+<div>
+<div id="enemyHp"></div>
+<div id="enemyAttack"></div>
 </div>
 </div>
 
@@ -106,96 +36,17 @@ align-items:center;
 <canvas id="board"></canvas>
 </div>
 
-<script src="game.js"></script>
-
 <div id="playerSection">
 <img class="characterImage">
-<div class="gaugeArea">
-<div class="gauge"><div id="playerHp" class="hpFill"></div></div>
-<div class="gauge"><div id="playerAttack" class="attackFill"></div></div>
+<div>
+<div id="playerHp"></div>
+<div id="playerAttack"></div>
 </div>
 </div>
 
 <div id="adArea">AD</div>
 
-<script>
-const canvas=document.getElementById("board");
-const ctx=canvas.getContext("2d");
-
-const SIZE=5;
-
-function resize(){
-const boardSize=Math.min(window.innerWidth*0.7,window.innerHeight*0.4);
-const CELL=Math.floor(boardSize/SIZE);
-canvas.width=CELL*SIZE;
-canvas.height=CELL*SIZE;
-return CELL;
-}
-
-let CELL=resize();
-
-window.addEventListener("resize",()=>{
-CELL=resize();
-});
-
-const COLORS=["#f44","#48f","#4d6","#fc3"];
-
-let board=[];
-let startX=-1,startY=-1;
-
-function init(){
-board=[];
-for(let y=0;y<SIZE;y++){
-let row=[];
-for(let x=0;x<SIZE;x++){
-row.push(Math.floor(Math.random()*4));
-}
-board.push(row);
-}
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-for(let y=0;y<SIZE;y++){
-for(let x=0;x<SIZE;x++){
-ctx.fillStyle=COLORS[board[y][x]];
-ctx.beginPath();
-ctx.arc(x*CELL+CELL/2,y*CELL+CELL/2,CELL/2-3,0,Math.PI*2);
-ctx.fill();
-}
-}
-}
-
-function swap(x1,y1,x2,y2){
-let t=board[y1][x1];
-board[y1][x1]=board[y2][x2];
-board[y2][x2]=t;
-}
-
-function loop(){
-draw();
-requestAnimationFrame(loop);
-}
-
-canvas.addEventListener("pointerdown",e=>{
-const r=canvas.getBoundingClientRect();
-startX=Math.floor((e.clientX-r.left)/CELL);
-startY=Math.floor((e.clientY-r.top)/CELL);
-});
-
-canvas.addEventListener("pointerup",e=>{
-const r=canvas.getBoundingClientRect();
-let x=Math.floor((e.clientX-r.left)/CELL);
-let y=Math.floor((e.clientY-r.top)/CELL);
-
-if(Math.abs(x-startX)+Math.abs(y-startY)!==1)return;
-
-swap(startX,startY,x,y);
-});
-
-init();
-loop();
-</script>
+<script src="game.js"></script>
 
 </body>
 </html>
