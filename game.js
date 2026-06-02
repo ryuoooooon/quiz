@@ -40,4 +40,40 @@ function draw() {
                 y * CELL + CELL / 2,
                 CELL / 2 - 3,
                 0,
-                Math.PI * 
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+    }
+}
+
+function swap(x1, y1, x2, y2) {
+    let t = board[y1][x1];
+    board[y1][x1] = board[y2][x2];
+    board[y2][x2] = t;
+}
+
+canvas.addEventListener("pointerdown", e => {
+    const r = canvas.getBoundingClientRect();
+    startX = Math.floor((e.clientX - r.left) / CELL);
+    startY = Math.floor((e.clientY - r.top) / CELL);
+});
+
+canvas.addEventListener("pointerup", e => {
+    const r = canvas.getBoundingClientRect();
+    let x = Math.floor((e.clientX - r.left) / CELL);
+    let y = Math.floor((e.clientY - r.top) / CELL);
+
+    // 隣接したブロックだけを交換可能：
+    if (Math.abs(x - startX) + Math.abs(y - startY) !== 1) return;
+
+    swap(startX, startY, x, y);
+});
+
+function loop() {
+    draw();
+    requestAnimationFrame(loop);
+}
+
+init();
+loop();
