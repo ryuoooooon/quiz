@@ -1,25 +1,150 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>X線作業主任者クイズ</title>
+
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.question {
+  font-size: 18px;
+  margin: 20px 0;
+  line-height: 1.5;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #334155;
+  color: #e2e8f0;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  background: #475569;
+}
+
+.correct {
+  background: #16a34a !important;
+}
+
+.wrong {
+  background: #dc2626 !important;
+}
+
+.result {
+  margin-top: 15px;
+  font-size: 14px;
+  min-height: 20px;
+  color: #cbd5e1;
+}
+
+.next {
+  margin-top: 20px;
+  background: #2563eb;
+}
+</style>
 </head>
+
 <body>
 
-<h1>X線作業主任者クイズ</h1>
+<div class="container">
+  <div class="card">
+    <h1>⚡ X線作業主任者クイズ</h1>
 
-<p>X線は何に分類される？</p>
+    <div class="question" id="question"></div>
 
-<button onclick="check(true)">電磁波</button>
-<button onclick="check(false)">音波</button>
+    <div id="choices"></div>
 
-<p id="result"></p>
+    <div class="result" id="result"></div>
+
+    <button class="btn next" onclick="nextQuestion()">次の問題</button>
+  </div>
+</div>
 
 <script>
-function check(correct){
-  document.getElementById("result").textContent =
-    correct ? "正解！" : "不正解";
+const quiz = [
+  {
+    q: "X線の本質として正しいものはどれか",
+    c: ["電磁波", "質量粒子", "音波", "陽子"],
+    a: 0,
+    exp: "X線は電磁波の一種です。"
+  },
+  {
+    q: "半価層の意味として正しいものはどれか",
+    c: ["線量が2倍になる厚さ", "線量が半分になる厚さ", "距離", "時間"],
+    a: 1,
+    exp: "放射線強度を1/2にする物質の厚さ。"
+  }
+];
+
+let index = 0;
+
+function load() {
+  const q = quiz[index];
+  document.getElementById("question").textContent = q.q;
+
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
+
+  document.getElementById("result").textContent = "";
+
+  q.c.forEach((text, i) => {
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.textContent = text;
+
+    btn.onclick = () => {
+      if (i === q.a) {
+        btn.classList.add("correct");
+        document.getElementById("result").textContent = "正解！ " + q.exp;
+      } else {
+        btn.classList.add("wrong");
+        document.getElementById("result").textContent = "不正解。 " + q.exp;
+      }
+    };
+
+    choices.appendChild(btn);
+  });
 }
+
+function nextQuestion() {
+  index = (index + 1) % quiz.length;
+  load();
+}
+
+load();
 </script>
 
 </body>
