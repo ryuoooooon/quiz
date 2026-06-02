@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>X線作業主任者クイズ</title>
+</head>
+<body>
+
+<h1>X線作業主任者クイズ</h1>
+
+<p>X線は何に分類される？</p>
+
+<button onclick="check(true)">電磁波</button>
+<button onclick="check(false)">音波</button>
+
+<p id="result"></p>
+
+<script>
+function check(correct){
+  document.getElementById("result").textContent =
+    correct ? "正解！" : "不正解";
+}
+</script>
+
+</body>
+</html>
