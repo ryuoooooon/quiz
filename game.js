@@ -1,58 +1,367 @@
-const chat = document.getElementById("chat");
+let love =
+Number(localStorage.getItem("love")) || 0;
 
-let love = 0;
-let coin = 0;
+let coin =
+Number(localStorage.getItem("coin")) || 0;
 
-function addMessage(name,text){
+let level =
+Number(localStorage.getItem("level")) || 1;
 
-    chat.innerHTML += `
-        <p><b>${name}</b>: ${text}</p>
-    `;
+let lastBonus =
+localStorage.getItem("bonus") || "";
 
-    chat.scrollTop = chat.scrollHeight;
+const chat =
+document.getElementById("chat");
+
+updateStatus();
+
+addAI(
+"こんにちは！私はミライだよ！"
+);
+
+document
+.getElementById("sendBtn")
+.addEventListener(
+"click",
+sendMessage
+);
+
+document
+.getElementById("message")
+.addEventListener(
+"keydown",
+e=>{
+if(e.key==="Enter"){
+sendMessage();
+}
+}
+);
+
+function save(){
+
+localStorage.setItem(
+"love",
+love
+);
+
+localStorage.setItem(
+"coin",
+coin
+);
+
+localStorage.setItem(
+"level",
+level
+);
+
+}
+
+function addUser(text){
+
+chat.innerHTML += `
+<div class="user">
+<div class="bubble">
+${text}
+</div>
+</div>
+`;
+
+scrollBottom();
+}
+
+function addAI(text){
+
+chat.innerHTML += `
+<div class="ai">
+<div class="bubble">
+${text}
+</div>
+</div>
+`;
+
+scrollBottom();
+}
+
+function scrollBottom(){
+
+chat.scrollTop =
+chat.scrollHeight;
+
 }
 
 function sendMessage(){
 
-    const input = document.getElementById("message");
+const input =
+document.getElementById(
+"message"
+);
 
-    const msg = input.value;
+const msg =
+input.value.trim();
 
-    if(!msg) return;
+if(!msg) return;
 
-    addMessage("あなた",msg);
+addUser(msg);
 
-    input.value = "";
+input.value="";
 
-    setTimeout(()=>{
-        aiReply(msg);
-    },500);
+setTimeout(()=>{
+reply(msg);
+},400);
+
 }
 
-function aiReply(msg){
+function reply(msg){
 
-    let reply = "";
+let text;
 
-    if(msg.includes("こんにちは")){
-        reply = "こんにちは！";
-        love += 1;
-    }
+if(msg.includes("こんにちは")){
 
-    else if(msg.includes("疲れ")){
-        reply = "お疲れ様。ゆっくり休んでね。";
-        love += 2;
-    }
+text="こんにちは！";
+love+=2;
 
-    else if(msg.includes("好き")){
-        reply = "えっ...嬉しい。";
-        love += 5;
-    }
+}
+else if(
+msg.includes("疲れ") ||
+msg.includes("しんどい")
+){
 
-    else{
-        reply = "もっとお話したいな。";
-    }
+text=
+"今日も頑張ったね！";
 
-    document.getElementById("love").textContent = love;
+love+=3;
 
-    addMessage("ミライ",reply);
+}
+else if(
+msg.includes("好き")
+){
+
+text=
+"えへへ、嬉しいな！";
+
+love+=5;
+
+}
+else{
+
+const list=[
+
+"もっと聞かせて！",
+
+"そうなんだ！",
+
+"面白いね！",
+
+"私は応援してるよ！",
+
+"また話してね！"
+
+];
+
+text =
+list[
+Math.floor(
+Math.random()
+* list.length
+)
+];
+
+}
+
+addAI(text);
+
+levelCheck();
+
+updateStatus();
+
+save();
+
+}
+
+function levelCheck(){
+
+const next =
+level * 30;
+
+if(love >= next){
+
+level++;
+
+coin += 20;
+
+addAI(
+"レベルアップ！Lv."+
+level+
+"になったよ！"
+);
+
+}
+
+}
+
+function updateStatus(){
+
+document
+.getElementById("love")
+.textContent = love;
+
+document
+.getElementById("coin")
+.textContent = coin;
+
+document
+.getElementById("level")
+.textContent =
+"Lv."+level;
+
+const max =
+level * 30;
+
+const percent =
+Math.min(
+100,
+love/max*100
+);
+
+document
+.getElementById("loveBar")
+.style.width =
+percent+"%";
+
+}
+
+function searchCoin(){
+
+const gain =
+Math.floor(
+Math.random()*15
+)+1;
+
+coin += gain;
+
+addAI(
+gain+
+"コイン見つけたよ！"
+);
+
+updateStatus();
+save();
+
+}
+
+function playJanken(){
+
+const hand =
+prompt(
+"0=グー 1=チョキ 2=パー"
+);
+
+if(hand===null) return;
+
+const ai =
+Math.floor(
+Math.random()*3
+);
+
+const names=[
+"グー",
+"チョキ",
+"パー"
+];
+
+let result;
+
+if(hand==ai){
+
+result="あいこ！";
+
+}
+else if(
+
+(hand==0&&ai==1)||
+(hand==1&&ai==2)||
+(hand==2&&ai==0)
+
+){
+
+result="勝ち！";
+
+coin += 10;
+love += 2;
+
+}
+else{
+
+result=
+"負けちゃった...";
+
+}
+
+addAI(
+"私は"+
+names[ai]+
+"！ "+
+result
+);
+
+updateStatus();
+save();
+
+}
+
+function dailyBonus(){
+
+const today =
+new Date()
+.toDateString();
+
+if(today===lastBonus){
+
+addAI(
+"今日はもう受け取ったよ！"
+);
+
+return;
+}
+
+coin += 50;
+
+lastBonus = today;
+
+localStorage.setItem(
+"bonus",
+today
+);
+
+addAI(
+"ログインボーナス50コイン！"
+);
+
+updateStatus();
+save();
+
+}
+
+function buyGift(){
+
+if(coin < 30){
+
+addAI(
+"コインが足りないよ！"
+);
+
+return;
+}
+
+coin -= 30;
+
+love += 10;
+
+addAI(
+"プレゼントありがとう！"
+);
+
+updateStatus();
+save();
+
 }
