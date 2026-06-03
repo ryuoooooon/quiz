@@ -1,0 +1,181 @@
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    touch-action:manipulation;
+}
+
+body{
+    font-family:sans-serif;
+    background:#f4f6fa;
+}
+
+header{
+    background:#4f7cff;
+    color:white;
+    text-align:center;
+    padding:12px;
+    font-size:20px;
+    font-weight:bold;
+    flex-shrink:0;
+}
+
+#game{
+    height:calc(100dvh - 52px);
+    max-width:700px;
+    margin:auto;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+#characterCard{
+    background:white;
+    border-radius:15px;
+    padding:10px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    flex-shrink:0;
+}
+
+#avatar{
+    font-size:60px;
+}
+
+#name{
+    font-size:22px;
+    font-weight:bold;
+}
+
+#level{
+    margin-top:5px;
+}
+
+#status{
+    display:flex;
+    justify-content:space-around;
+    gap:8px;
+    margin-top:10px;
+}
+
+.statusBox{
+    flex:1;
+    background:#eef2ff;
+    padding:8px;
+    border-radius:10px;
+}
+
+.progress{
+    height:12px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.progressBar{
+    width:0%;
+    height:100%;
+    background:#ff6ab0;
+    transition:.3s;
+}
+
+#chat{
+    flex:1;
+    min-height:0;
+
+    overflow-y:auto;
+
+    background:white;
+    border-radius:15px;
+
+    padding:10px;
+
+    margin-top:10px;
+    margin-bottom:10px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.user{
+    text-align:right;
+    margin:8px 0;
+}
+
+.ai{
+    text-align:left;
+    margin:8px 0;
+}
+
+.bubble{
+    display:inline-block;
+    padding:10px 14px;
+    border-radius:14px;
+    max-width:80%;
+    word-break:break-word;
+}
+
+.user .bubble{
+    background:#4f7cff;
+    color:white;
+}
+
+.ai .bubble{
+    background:#ececec;
+}
+
+#inputArea{
+    display:flex;
+    gap:5px;
+    flex-shrink:0;
+}
+
+#message{
+    flex:1;
+    border:none;
+    border-radius:10px;
+    padding:12px;
+    font-size:16px;
+}
+
+#sendBtn{
+    border:none;
+    border-radius:10px;
+    background:#4f7cff;
+    color:white;
+    padding:0 16px;
+    font-size:16px;
+}
+
+#games{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:8px;
+    flex-shrink:0;
+}
+
+.gameBtn{
+    border:none;
+    border-radius:10px;
+    padding:10px;
+    background:white;
+    box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+#eventBox{
+    margin-top:8px;
+    padding:8px;
+    text-align:center;
+    background:white;
+    border-radius:12px;
+    flex-shrink:0;
+}
