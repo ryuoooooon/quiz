@@ -1,517 +1,80 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI育成ゲーム</title>
-
-<style>
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    font-family:sans-serif;
-    background:#f4f6fa;
-}
-
-header{
-    background:#4f7cff;
-    color:white;
-    text-align:center;
-    padding:12px;
-    font-size:20px;
-    font-weight:bold;
-}
-
-#game{
-    max-width:700px;
-    margin:auto;
-    padding:10px;
-}
-
-#characterCard{
-    background:white;
-    border-radius:15px;
-    padding:15px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
-
-#avatar{
-    font-size:80px;
-}
-
-#name{
-    font-size:24px;
-    font-weight:bold;
-}
-
-#level{
-    margin-top:5px;
-}
-
-#status{
-    display:flex;
-    justify-content:space-around;
-    margin-top:10px;
-}
-
-.statusBox{
-    background:#eef2ff;
-    padding:10px;
-    border-radius:10px;
-    width:45%;
-}
-
-#chat{
-    background:white;
-    margin-top:10px;
-    height:320px;
-    overflow-y:auto;
-    border-radius:15px;
-    padding:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
-
-.user{
-    text-align:right;
-    margin:8px;
-}
-
-.ai{
-    text-align:left;
-    margin:8px;
-}
-
-.bubble{
-    display:inline-block;
-    padding:10px;
-    border-radius:12px;
-    max-width:80%;
-}
-
-.user .bubble{
-    background:#4f7cff;
-    color:white;
-}
-
-.ai .bubble{
-    background:#eee;
-}
-
-#inputArea{
-    display:flex;
-    margin-top:10px;
-}
-
-#message{
-    flex:1;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-}
-
-#sendBtn{
-    margin-left:5px;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#4f7cff;
-    color:white;
-}
-
-#games{
-    margin-top:10px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-.gameBtn{
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:white;
-    box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
-
-#eventBox{
-    margin-top:10px;
-    background:white;
-    padding:10px;
-    border-radius:12px;
-    text-align:center;
-}
-
-.progress{
-    height:12px;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.progressBar{
-    height:100%;
-    width:0%;
-    background:#ff6ab0;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>育成ゲーム</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .game-container {
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .character {
+      text-align: center;
+      padding: 10px;
+    }
+    .character img {
+      width: 150px;
+      height: 150px;
+    }
+    .conversation-log {
+      height: 100px;
+      overflow-y: auto;
+      background: #f9f9f9;
+      padding: 5px;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+    .input-container {
+      display: flex;
+    }
+    .input-container input {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-right: none;
+      padding: 5px;
+    }
+    .input-container button {
+      border: 1px solid #ccc;
+      background: #eee;
+      padding: 5px;
+      cursor: pointer;
+    }
+    .status {
+      padding: 10px;
+      font-size: 14px;
+      background: #f9f9f9;
+    }
+  </style>
 </head>
-
 <body>
-
-<header>
-AI育成ゲーム
-</header>
-
-<div id="game">
-
-<div id="characterCard">
-<div id="avatar">🤖</div>
-<div id="name">ミライ</div>
-<div id="level">Lv.1</div>
-
-<div class="progress">
-<div id="loveBar" class="progressBar"></div>
-</div>
-
-<div id="status">
-
-<div class="statusBox">
-❤️ 好感度
-<div id="love">0</div>
-</div>
-
-<div class="statusBox">
-🪙 コイン
-<div id="coin">0</div>
-</div>
-
-</div>
-</div>
-
-<div id="chat"></div>
-
-<div id="inputArea">
-<input id="message" placeholder="ミライに話しかけよう">
-<button id="sendBtn">送信</button>
-</div>
-
-<div id="games">
-
-<button class="gameBtn" onclick="searchCoin()">
-🪙 コイン探し
-</button>
-
-<button class="gameBtn" onclick="playJanken()">
-✊ じゃんけん
-</button>
-
-<button class="gameBtn" onclick="dailyBonus()">
-🎁 ログインボーナス
-</button>
-
-<button class="gameBtn" onclick="buyGift()">
-🎀 プレゼント
-</button>
-
-</div>
-
-<div id="eventBox">
-ミライと仲良くなろう！
-</div>
-
-</div>
-
-<script>
-
-let love = Number(localStorage.getItem("love")) || 0;
-let coin = Number(localStorage.getItem("coin")) || 0;
-let level = Number(localStorage.getItem("level")) || 1;
-let lastBonus = localStorage.getItem("bonus") || "";
-
-const chat = document.getElementById("chat");
-
-updateStatus();
-
-addAI("こんにちは！私はミライだよ！");
-
-document
-.getElementById("sendBtn")
-.addEventListener("click",sendMessage);
-
-document
-.getElementById("message")
-.addEventListener("keydown",(e)=>{
-    if(e.key==="Enter"){
-        sendMessage();
-    }
-});
-
-function save(){
-
-    localStorage.setItem("love",love);
-    localStorage.setItem("coin",coin);
-    localStorage.setItem("level",level);
-
-}
-
-function addUser(text){
-
-    chat.innerHTML += `
-    <div class="user">
-      <div class="bubble">${text}</div>
+  <div class="game-container">
+    <div class="character">
+      <img src="character.png" alt="キャラクター">
     </div>
-    `;
-
-    scrollBottom();
-}
-
-function addAI(text){
-
-    chat.innerHTML += `
-    <div class="ai">
-      <div class="bubble">${text}</div>
+    <div class="conversation-log" id="conversation-log"></div>
+    <div class="input-container">
+      <input type="text" id="input" placeholder="話しかける">
+      <button id="send">送信</button>
     </div>
-    `;
-
-    scrollBottom();
-}
-
-function scrollBottom(){
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function sendMessage(){
-
-    const input =
-    document.getElementById("message");
-
-    const msg = input.value.trim();
-
-    if(!msg) return;
-
-    addUser(msg);
-
-    input.value = "";
-
-    setTimeout(()=>{
-        reply(msg);
-    },400);
-}
-
-function reply(msg){
-
-    let text;
-
-    if(msg.includes("こんにちは")){
-
-        text="こんにちは！";
-
-        love+=2;
-
-    }else if(
-        msg.includes("疲れ") ||
-        msg.includes("しんどい")
-    ){
-
-        text="今日も頑張ったね。";
-
-        love+=3;
-
-    }else if(
-        msg.includes("好き")
-    ){
-
-        text="えへへ、嬉しいな！";
-
-        love+=5;
-
-    }else{
-
-        const list=[
-            "もっと聞かせて！",
-            "そうなんだ！",
-            "面白いね！",
-            "私は応援してるよ！",
-            "また話してね！"
-        ];
-
-        text=
-        list[
-        Math.floor(
-        Math.random()*list.length)];
-    }
-
-    addAI(text);
-
-    levelCheck();
-
-    updateStatus();
-
-    save();
-}
-
-function levelCheck(){
-
-    const next =
-    level * 30;
-
-    if(love >= next){
-
-        level++;
-
-        coin += 20;
-
-        addAI(
-        "レベルアップ！Lv."+level+
-        "になったよ！"
-        );
-    }
-}
-
-function updateStatus(){
-
-    document.getElementById("love")
-    .textContent = love;
-
-    document.getElementById("coin")
-    .textContent = coin;
-
-    document.getElementById("level")
-    .textContent = "Lv."+level;
-
-    const max = level*30;
-
-    const percent =
-    Math.min(100,
-    love/max*100);
-
-    document.getElementById("loveBar")
-    .style.width =
-    percent+"%";
-}
-
-function searchCoin(){
-
-    const gain =
-    Math.floor(Math.random()*15)+1;
-
-    coin += gain;
-
-    addAI(
-    gain+
-    "コイン見つけたよ！"
-    );
-
-    updateStatus();
-    save();
-}
-
-function playJanken(){
-
-    const hand =
-    prompt(
-    "0=グー 1=チョキ 2=パー"
-    );
-
-    if(hand===null) return;
-
-    const ai =
-    Math.floor(Math.random()*3);
-
-    const names =
-    ["グー","チョキ","パー"];
-
-    let result;
-
-    if(hand==ai){
-
-        result="あいこ！";
-
-    }else if(
-    (hand==0&&ai==1)||
-    (hand==1&&ai==2)||
-    (hand==2&&ai==0)
-    ){
-
-        result="勝ち！";
-
-        coin+=10;
-        love+=2;
-
-    }else{
-
-        result="負けちゃった...";
-    }
-
-    addAI(
-    "私は"+
-    names[ai]+
-    "！ "+result
-    );
-
-    updateStatus();
-    save();
-}
-
-function dailyBonus(){
-
-    const today =
-    new Date()
-    .toDateString();
-
-    if(today===lastBonus){
-
-        addAI(
-        "今日はもう受け取ったよ！"
-        );
-
-        return;
-    }
-
-    coin += 50;
-
-    lastBonus = today;
-
-    localStorage.setItem(
-    "bonus",
-    today
-    );
-
-    addAI(
-    "ログインボーナス50コイン！"
-    );
-
-    updateStatus();
-    save();
-}
-
-function buyGift(){
-
-    if(coin<30){
-
-        addAI(
-        "コインが足りないよ！"
-        );
-
-        return;
-    }
-
-    coin-=30;
-    love+=10;
-
-    addAI(
-    "プレゼントありがとう！"
-    );
-
-    updateStatus();
-    save();
-}
-
-</script>
-
+    <div class="status">
+      好感度: <span id="affection">0</span> コイン: <span id="coins">0</span>
+    </div>
+    <button id="mini-game">ミニゲーム</button>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
