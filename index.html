@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI育成ゲーム</title>
+
+<style>
+body{
+    font-family:sans-serif;
+    max-width:600px;
+    margin:auto;
+    padding:10px;
+}
+
+#character{
+    width:200px;
+    display:block;
+    margin:auto;
+}
+
+#chat{
+    height:300px;
+    border:1px solid #ccc;
+    overflow-y:auto;
+    padding:10px;
+    margin:10px 0;
+}
+
+#inputArea{
+    display:flex;
+}
+
+#message{
+    flex:1;
+    padding:8px;
+}
+
+button{
+    padding:8px 16px;
+}
+
+.status{
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<img id="character"
+src="https://placehold.co/200x200/png">
+
+<div id="chat"></div>
+
+<div id="inputArea">
+<input id="message" placeholder="話しかけてみよう">
+<button onclick="sendMessage()">送信</button>
+</div>
+
+<div class="status">
+好感度: <span id="love">0</span><br>
+コイン: <span id="coin">0</span>
+</div>
+
+<script src="game.js"></script>
+
+</body>
+</html>
