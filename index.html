@@ -9,35 +9,56 @@
 
 <body>
 
-<div id="menuBar">
-    <button>MENU</button>
-    <div>Battle Puzzle</div>
-    <button>SET</button>
-</div>
-
-<div id="enemySection">
-    <img class="characterImage">
-    <div class="gaugeArea">
-        <div class="gauge"><div id="enemyHp" class="hpFill"></div></div>
-        <div class="gauge"><div id="enemyAttack" class="attackFill"></div></div>
+<!-- キャラクター選択画面 -->
+<div id="characterSelect">
+    <h1>キャラクターを選択してください</h1>
+    <div id="characterOptions">
+        <div class="character" data-name="Knight">
+            <img src="knight.png" alt="Knight">
+            <span>Knight</span>
+        </div>
+        <div class="character" data-name="Wizard">
+            <img src="wizard.png" alt="Wizard">
+            <span>Wizard</span>
+        </div>
+        <div class="character" data-name="Archer">
+            <img src="archer.png" alt="Archer">
+            <span>Archer</span>
+        </div>
     </div>
+    <button id="startGame" disabled>ゲーム開始</button>
 </div>
 
-<div id="boardArea">
-    <canvas id="board"></canvas>
-</div>
-
-<div id="playerSection">
-    <img class="characterImage">
-    <div class="gaugeArea">
-        <div class="gauge"><div id="playerHp" class="hpFill"></div></div>
-        <div class="gauge"><div id="playerAttack" class="attackFill"></div></div>
+<!-- ゲーム画面 -->
+<div id="gameScreen" style="display: none;">
+    <div id="menuBar">
+        <button>MENU</button>
+        <div id="playerCharacterName">Character</div>
+        <button>SET</button>
     </div>
+
+    <div id="enemySection">
+        <img class="characterImage">
+        <div class="gaugeArea">
+            <div class="gauge"><div id="enemyHp" class="hpFill"></div></div>
+            <div class="gauge"><div id="enemyAttack" class="attackFill"></div></div>
+        </div>
+    </div>
+
+    <div id="boardArea">
+        <canvas id="board"></canvas>
+    </div>
+
+    <div id="playerSection">
+        <img id="playerCharacterImage" class="characterImage">
+        <div class="gaugeArea">
+            <div class="gauge"><div id="playerHp" class="hpFill"></div></div>
+            <div class="gauge"><div id="playerAttack" class="attackFill"></div></div>
+        </div>
+    </div>
+
+    <div id="adArea">AD</div>
+
+    <script src="game.js"></script>
 </div>
-
-<div id="adArea">AD</div>
-
-<script src="game.js"></script>
-
 </body>
-</html>
