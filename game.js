@@ -51,35 +51,19 @@ coin
 
 localStorage.setItem(
 "level",
-level
-);
-
-}
 
 function addUser(text){
-
-chat.innerHTML += `
-<div class="user">
-<div class="bubble">
-${text}
-</div>
-</div>
-`;
-
-scrollBottom();
+  const div = document.createElement("div");
+  div.className = "user";
+  div.innerHTML = `<div class="bubble">${text}</div>`;
+  chat.appendChild(div);
 }
 
 function addAI(text){
-
-chat.innerHTML += `
-<div class="ai">
-<div class="bubble">
-${text}
-</div>
-</div>
-`;
-
-scrollBottom();
+  const div = document.createElement("div");
+  div.className = "ai";
+  div.innerHTML = `<div class="bubble">${text}</div>`;
+  chat.appendChild(div);
 }
 
 function scrollBottom(){
