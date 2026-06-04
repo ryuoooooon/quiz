@@ -198,7 +198,7 @@ msg.includes("こんにちは")
 
 text =
 (userName ?
-userName+"こんにちは！" :
+userName+"、こんにちは！" :
 "こんにちは！");
 
 love += 2;
@@ -220,9 +220,6 @@ msg.includes("好き")
 ){
 
 text =
-(userName ?
-userName+"、" :
-"") +
 "えへへ〜、ありがと〜♪";
 
 love += 5;
@@ -234,11 +231,11 @@ const list=[
 
 "もっと聞かせてちょうだい！",
 
-"！",
+"今からランニングよ！",
 
-"面白いね！",
+"ケーキはアイドルの食べ物じゃないわ",
 
-"私は応援してるよ！",
+"マザーAIにおまかせ！",
 
 "また話してね！"
 
@@ -390,7 +387,7 @@ else if(
 
 ){
 
-result="勝ち！";
+result="あなたの勝ちね！";
 
 coin+=10;
 love+=2;
@@ -421,7 +418,7 @@ new Date().toDateString();
 if(today===lastBonus){
 
 addAI(
-"今日はもう受け取ったよ！"
+"今日はもう受け取ったわ！"
 );
 
 return;
@@ -462,7 +459,7 @@ coin-=30;
 love+=10;
 
 addAI(
-"プレゼントありがとう！"
+"えへへ〜ありがと〜♪！"
 );
 
 updateStatus();
@@ -475,7 +472,7 @@ window.gacha = function(){
 if(coin<50){
 
 addAI(
-"50マニー必要だよ！"
+"50マニー必要よ！"
 );
 
 return;
@@ -509,7 +506,7 @@ costumes.push(item);
 
 addAI(
 item+
-"を獲得したよ！"
+"を獲得したわ！"
 );
 
 updateStatus();
