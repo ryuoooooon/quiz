@@ -37,7 +37,7 @@ if(userName){
 addAI(
 "おかえりなさい、" +
 userName +
-"さん！"
+"！"
 );
 
 }else{
