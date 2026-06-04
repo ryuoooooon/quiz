@@ -347,7 +347,7 @@ coin += gain;
 
 addAI(
 gain+
-"マニー見つけたよ！"
+"マニー見つけたわ！"
 );
 
 updateStatus();
@@ -376,7 +376,7 @@ let result;
 
 if(hand==ai){
 
-result="あいこ！";
+result="あいこね！";
 
 }
 else if(
