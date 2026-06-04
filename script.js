@@ -5,6 +5,9 @@ let coin = Number(localStorage.getItem("coin")) || 0;
 let level = Number(localStorage.getItem("level")) || 1;
 let lastBonus = localStorage.getItem("bonus") || "";
 
+let userName =
+localStorage.getItem("userName") || "";
+
 let costumes =
 JSON.parse(
 localStorage.getItem("costumes")
@@ -29,9 +32,21 @@ document.getElementById("avatar");
 
 updateStatus();
 
+if(userName){
+
 addAI(
-"こんにちは！私はミライだよ！"
+"おかえりなさい、" +
+userName +
+"さん！"
 );
+
+}else{
+
+addAI(
+"こんにちは！私はミライだよ！名前を教えてね！"
+);
+
+}
 
 sendBtn.addEventListener(
 "click",
@@ -49,20 +64,10 @@ sendMessage();
 
 function save(){
 
-localStorage.setItem(
-"love",
-love
-);
-
-localStorage.setItem(
-"coin",
-coin
-);
-
-localStorage.setItem(
-"level",
-level
-);
+localStorage.setItem("love",love);
+localStorage.setItem("coin",coin);
+localStorage.setItem("level",level);
+localStorage.setItem("userName",userName);
 
 localStorage.setItem(
 "costumes",
@@ -80,9 +85,7 @@ function addUser(text){
 
 chat.innerHTML += `
 <div class="user">
-<div class="bubble">
-${text}
-</div>
+<div class="bubble">${text}</div>
 </div>
 `;
 
@@ -94,9 +97,7 @@ function addAI(text){
 
 chat.innerHTML += `
 <div class="ai">
-<div class="bubble">
-${text}
-</div>
+<div class="bubble">${text}</div>
 </div>
 `;
 
@@ -118,27 +119,19 @@ if(!avatar) return;
 switch(type){
 
 case "happy":
-
-avatar.style.filter =
-"brightness(1.15)";
+avatar.style.filter="brightness(1.15)";
 break;
 
 case "love":
-
-avatar.style.filter =
-"saturate(1.8)";
+avatar.style.filter="saturate(1.8)";
 break;
 
 case "sad":
-
-avatar.style.filter =
-"grayscale(0.7)";
+avatar.style.filter="grayscale(0.7)";
 break;
 
 default:
-
-avatar.style.filter =
-"none";
+avatar.style.filter="none";
 
 }
 
@@ -166,15 +159,49 @@ function reply(msg){
 let text;
 
 if(
+msg.includes("私の名前は")
+){
+
+userName =
+msg.replace(
+"私の名前は",
+""
+).trim();
+
+text =
+userName +
+"さんだね！覚えたよ！";
+
+love += 5;
+
+}
+else if(
+msg.includes("名前は")
+){
+
+userName =
+msg.replace(
+"名前は",
+""
+).trim();
+
+text =
+userName +
+"さんだね！覚えたよ！";
+
+love += 5;
+
+}
+else if(
 msg.includes("こんにちは")
 ){
 
 text =
-"こんにちは！";
+(userName ?
+userName+"さん、こんにちは！" :
+"こんにちは！");
 
 love += 2;
-
-setFace("happy");
 
 }
 else if(
@@ -187,24 +214,23 @@ text =
 
 love += 3;
 
-setFace("happy");
-
 }
 else if(
 msg.includes("好き")
 ){
 
 text =
+(userName ?
+userName+"さん、" :
+"") +
 "えへへ、嬉しいな！";
 
 love += 5;
 
-setFace("love");
-
 }
 else{
 
-const list = [
+const list=[
 
 "もっと聞かせて！",
 
@@ -222,12 +248,9 @@ text =
 list[
 Math.floor(
 Math.random()
-*
-list.length
+* list.length
 )
 ];
-
-setFace("normal");
 
 }
 
@@ -246,17 +269,15 @@ function levelCheck(){
 const next =
 level * 30;
 
-if(
-love >= next
-){
+if(love >= next){
 
 level++;
 
 coin += 20;
 
 addAI(
-"レベルアップ！ Lv." +
-level +
+"レベルアップ！ Lv."+
+level+
 "！"
 );
 
@@ -267,9 +288,7 @@ level +
 function checkEvents(){
 
 const eventBox =
-document.getElementById(
-"eventBox"
-);
+document.getElementById("eventBox");
 
 if(love >= 100){
 
@@ -296,40 +315,31 @@ eventBox.textContent =
 
 function updateStatus(){
 
-document
-.getElementById("love")
-.textContent =
-love;
+document.getElementById("love")
+.textContent = love;
 
-document
-.getElementById("coin")
-.textContent =
-coin;
+document.getElementById("coin")
+.textContent = coin;
 
-document
-.getElementById("level")
+document.getElementById("level")
 .textContent =
-"Lv." + level;
+"Lv."+level;
 
 const percent =
 Math.min(
 100,
-love /
-(level * 30)
-* 100
+love/(level*30)*100
 );
 
-document
-.getElementById("loveBar")
+document.getElementById("loveBar")
 .style.width =
-percent + "%";
+percent+"%";
 
 checkEvents();
 
 }
 
-window.searchCoin =
-function(){
+window.searchCoin = function(){
 
 const gain =
 Math.floor(
@@ -339,44 +349,37 @@ Math.random()*15
 coin += gain;
 
 addAI(
-gain +
+gain+
 "コイン見つけたよ！"
 );
 
 updateStatus();
-
 save();
 
 };
 
-window.playJanken =
-function(){
+window.playJanken = function(){
 
 const hand =
 prompt(
 "0=グー 1=チョキ 2=パー"
 );
 
-if(hand===null)
-return;
+if(hand===null) return;
 
 const ai =
 Math.floor(
 Math.random()*3
 );
 
-const names = [
-"グー",
-"チョキ",
-"パー"
-];
+const names =
+["グー","チョキ","パー"];
 
 let result;
 
 if(hand==ai){
 
-result =
-"あいこ！";
+result="あいこ！";
 
 }
 else if(
@@ -387,48 +390,35 @@ else if(
 
 ){
 
-result =
-"勝ち！";
+result="勝ち！";
 
-coin += 10;
-
-love += 2;
-
-setFace("happy");
+coin+=10;
+love+=2;
 
 }
 else{
 
-result =
-"負けちゃった…";
-
-setFace("sad");
+result="負けちゃった...";
 
 }
 
 addAI(
-"私は" +
-names[ai] +
-"！ " +
-result
+"私は"+
+names[ai]+
+"！ "+result
 );
 
 updateStatus();
-
 save();
 
 };
 
-window.dailyBonus =
-function(){
+window.dailyBonus = function(){
 
 const today =
-new Date()
-.toDateString();
+new Date().toDateString();
 
-if(
-today === lastBonus
-){
+if(today===lastBonus){
 
 addAI(
 "今日はもう受け取ったよ！"
@@ -440,8 +430,7 @@ return;
 
 coin += 50;
 
-lastBonus =
-today;
+lastBonus = today;
 
 localStorage.setItem(
 "bonus",
@@ -449,21 +438,17 @@ today
 );
 
 addAI(
-"ログインボーナス！50コイン獲得！"
+"ログインボーナス50コイン！"
 );
 
 updateStatus();
-
 save();
 
 };
 
-window.buyGift =
-function(){
+window.buyGift = function(){
 
-if(
-coin < 30
-){
+if(coin<30){
 
 addAI(
 "コインが足りないよ！"
@@ -473,28 +458,21 @@ return;
 
 }
 
-coin -= 30;
-
-love += 10;
-
-setFace("love");
+coin-=30;
+love+=10;
 
 addAI(
-"プレゼントありがとう♪"
+"プレゼントありがとう！"
 );
 
 updateStatus();
-
 save();
 
 };
 
-window.gacha =
-function(){
+window.gacha = function(){
 
-if(
-coin < 50
-){
+if(coin<50){
 
 addAI(
 "50コイン必要だよ！"
@@ -504,49 +482,42 @@ return;
 
 }
 
-coin -= 50;
+coin-=50;
 
 const r =
 Math.random();
 
 let item;
 
-if(r < 0.6){
+if(r<0.6){
 
-item =
-"リボン";
+item="リボン";
 
 }
-else if(
-r < 0.9
-){
+else if(r<0.9){
 
-item =
-"制服";
+item="制服";
 
 }
 else{
 
-item =
-"レア衣装";
+item="レア衣装";
 
 }
 
 costumes.push(item);
 
 addAI(
-item +
+item+
 "を獲得したよ！"
 );
 
 updateStatus();
-
 save();
 
 };
 
-window.collectIdleReward =
-function(){
+window.collectIdleReward = function(){
 
 const now =
 Date.now();
@@ -557,7 +528,7 @@ Math.floor(
 /60000
 );
 
-if(diff <= 0){
+if(diff<=0){
 
 addAI(
 "まだ報酬はないよ！"
@@ -575,16 +546,14 @@ diff
 
 coin += reward;
 
-lastLogin =
-now;
+lastLogin = now;
 
 addAI(
-reward +
+reward+
 "コイン獲得！"
 );
 
 updateStatus();
-
 save();
 
 };
