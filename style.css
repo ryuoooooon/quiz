@@ -60,6 +60,10 @@ header{
     flex-shrink:0;
 }
 
+#header{
+    object-position:center;
+}
+    
 #avatar{
     width:120px;
     height:120px;
