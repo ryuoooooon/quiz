@@ -287,14 +287,14 @@ function checkEvents(){
 const eventBox =
 document.getElementById("eventBox");
 
-if(love >= 100){
+if(love >= 50){
 
 eventBox.textContent =
 "特別イベント解放！";
 
 }
 else if(
-love >= 50
+love >= 20
 ){
 
 eventBox.textContent =
