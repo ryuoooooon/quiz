@@ -43,7 +43,7 @@ userName +
 }else{
 
 addAI(
-"こんにちは！私はミライだよ！名前を教えてね！"
+"こんにちは！私は未来のトップアイドル花海咲季！あなたの名前を教えてちょうだい！"
 );
 
 }
@@ -159,18 +159,18 @@ function reply(msg){
 let text;
 
 if(
-msg.includes("私の名前は")
+msg.includes("名前は")
 ){
 
 userName =
 msg.replace(
-"私の名前は",
+"名前は",
 ""
 ).trim();
 
 text =
 userName +
-"さんだね！覚えたよ！";
+"ね！覚えたわ！";
 
 love += 5;
 
@@ -187,7 +187,7 @@ msg.replace(
 
 text =
 userName +
-"さんだね！覚えたよ！";
+"ね！覚えたわ！";
 
 love += 5;
 
@@ -198,7 +198,7 @@ msg.includes("こんにちは")
 
 text =
 (userName ?
-userName+"さん、こんにちは！" :
+userName+"こんにちは！" :
 "こんにちは！");
 
 love += 2;
@@ -210,7 +210,7 @@ msg.includes("しんどい")
 ){
 
 text =
-"今日も頑張ったね！";
+"あなたのためにSSDを作ってあるわ！";
 
 love += 3;
 
@@ -221,9 +221,9 @@ msg.includes("好き")
 
 text =
 (userName ?
-userName+"さん、" :
+userName+"、" :
 "") +
-"えへへ、嬉しいな！";
+"えへへ〜、ありがと〜♪";
 
 love += 5;
 
@@ -232,9 +232,9 @@ else{
 
 const list=[
 
-"もっと聞かせて！",
+"もっと聞かせてちょうだい！",
 
-"そうなんだ！",
+"！",
 
 "面白いね！",
 
@@ -301,13 +301,13 @@ love >= 50
 ){
 
 eventBox.textContent =
-"ミライはあなたを信頼している";
+"咲季はあなたを信頼している";
 
 }
 else{
 
 eventBox.textContent =
-"ミライと仲良くなろう！";
+"咲季おねえちゃんと仲良くなろう！";
 
 }
 
@@ -350,7 +350,7 @@ coin += gain;
 
 addAI(
 gain+
-"コイン見つけたよ！"
+"マニー見つけたよ！"
 );
 
 updateStatus();
@@ -398,7 +398,7 @@ love+=2;
 }
 else{
 
-result="負けちゃった...";
+result="はい、私の勝ち！";
 
 }
 
@@ -451,7 +451,7 @@ window.buyGift = function(){
 if(coin<30){
 
 addAI(
-"コインが足りないよ！"
+"マニーが足りないよ！"
 );
 
 return;
@@ -475,7 +475,7 @@ window.gacha = function(){
 if(coin<50){
 
 addAI(
-"50コイン必要だよ！"
+"50マニー必要だよ！"
 );
 
 return;
@@ -550,7 +550,7 @@ lastLogin = now;
 
 addAI(
 reward+
-"コイン獲得！"
+"マニー獲得！"
 );
 
 updateStatus();
