@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>個人用勉強ノート</title>
+<title>オンライン教材サイト - StudyText</title>
 
 <style>
 :root {
-    /* カラーパレットの設定 */
-    --primary-color: #4f46e5; /* 上品なインディゴブルー */
-    --bg-color: #f3f4f6;      /* 柔らかいライトグレー */
-    --surface-color: #ffffff; /* カードの背景色 */
-    --text-main: #1f2937;     /* 濃いグレー（真っ黒より目に優しい） */
-    --text-muted: #6b7280;    /* サブテキスト用 */
-    --border-color: #e5e7eb;  /* 境界線用 */
+    --primary-color: #0ea5e9; /* 教材サイトらしい爽やかなスカイブルー */
+    --bg-color: #f8fafc;
+    --surface-color: #ffffff;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --accent-bg: #f0f9ff; /* 重要ポイントの背景色 */
 }
 
 *{
@@ -25,34 +25,35 @@ body{
     font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     background: var(--bg-color);
     color: var(--text-main);
-    line-height: 1.6;
+    line-height: 1.8;
 }
 
-/* ヘッダー（すりガラス効果） */
+/* ヘッダー */
 header{
     position:sticky;
     top:0;
     z-index:100;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px); /* すりガラス効果 */
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
 }
 
 h1{
     margin:0;
-    padding:16px 12px 8px;
-    font-size:16px;
+    padding:16px 12px 12px;
+    font-size:22px;
     font-weight: 700;
     text-align:center;
-    letter-spacing: 0.5px;
+    color: #0f172a;
 }
 
-/* タブ */
+/* タブナビゲーション */
 .tabs{
     display:flex;
+    justify-content: center; /* 中央寄せにしてサイトメニューっぽく */
     overflow-x:auto;
-    gap:10px;
+    gap:8px;
     padding:12px 16px;
 }
 
@@ -61,109 +62,112 @@ h1{
 }
 
 .tab{
-    padding: 8px 20px;
-    font-size: 14px;
+    padding: 10px 24px;
+    font-size: 15px;
     font-weight: 600;
     border:none;
-    border-radius: 999px; /* ピル型（完全な角丸） */
-    background: var(--surface-color);
+    border-radius: 8px; /* ピル型から角丸四角へ（よりサイトらしく） */
+    background: transparent;
     color: var(--text-muted);
     cursor:pointer;
-    flex-shrink:0;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: all 0.2s ease; /* ホバーなどのアニメーションを滑らかに */
+    transition: all 0.2s ease;
 }
 
 .tab:hover {
-    background: #f9fafb;
+    background: var(--border-color);
     color: var(--text-main);
 }
 
 .tab.active{
     background: var(--primary-color);
     color: white;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); /* アクティブ時だけ影を強調 */
-}
-
-.add-tab {
-    padding: 8px 16px;
-    background: transparent;
-    border: 1px dashed #ccc;
-    box-shadow: none;
-}
-
-.add-tab:hover {
-    background: #e5e7eb;
+    box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);
 }
 
 /* メインコンテンツ */
 main{
-    padding: 20px 16px;
-    max-width: 800px;
-    margin: 0 auto; /* PC表示の際に中央寄せ */
+    padding: 30px 16px;
+    max-width: 760px; /* 読みやすい横幅に制限 */
+    margin: 0 auto;
 }
 
-/* 広告（悪目立ちしないように調整） */
-.ad{
-    background: #f9fafb;
-    border: 1px solid var(--border-color);
-    color: #9ca3af;
-    padding:15px;
-    text-align:center;
-    margin: 20px 0;
-    border-radius:12px;
-    font-size: 12px;
-}
-
-/* ノートカード */
-.note{
+/* コンテンツ表示エリア（教科書スタイル） */
+.lesson-content {
     background: var(--surface-color);
     border-radius:16px;
-    padding: 24px;
-    margin-bottom:24px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* 広く薄い高級感のある影 */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    margin-bottom: 40px;
 }
 
-.note:focus-within {
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08); /* 入力時に少し浮き上がる演出 */
-    transform: translateY(-2px);
+/* 教材内のタイポグラフィ（見出しや段落の装飾） */
+.lesson-content h2 {
+    font-size: 24px;
+    color: #0f172a;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-top: 0;
+    margin-bottom: 24px;
 }
 
-.note h2{
-    margin-top:0;
-    margin-bottom: 16px;
+.lesson-content h3 {
     font-size: 18px;
-    color: var(--text-main);
-    border-left: 4px solid var(--primary-color); /* 左にアクセントライン */
-    padding-left: 10px;
+    color: var(--primary-color);
+    margin-top: 32px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+}
+.lesson-content h3::before {
+    content: "■";
+    margin-right: 8px;
+    font-size: 14px;
 }
 
-/* テキストエリア（シームレスに） */
-textarea{
-    width:100%;
-    min-height:280px;
-    border: none;
-    background: transparent;
-    padding: 0;
-    resize:vertical;
-    font-size:16px;
-    font-family: inherit;
-    line-height: 1.8;
-    color: var(--text-main);
+.lesson-content p {
+    margin-bottom: 20px;
 }
 
-textarea:focus {
-    outline: none; /* デフォルトの青い枠線を消す */
+.lesson-content ul {
+    background: var(--bg-color);
+    padding: 20px 20px 20px 40px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.lesson-content li {
+    margin-bottom: 8px;
+}
+
+/* 重要ポイントのボックス */
+.important-box {
+    background: var(--accent-bg);
+    border-left: 4px solid var(--primary-color);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 24px 0;
+}
+
+.important-box strong {
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 8px;
 }
 
 /* フッター */
 footer{
     text-align:center;
-    padding: 30px 20px;
+    padding: 40px 20px;
     color: var(--text-muted);
-    font-size:13px;
-    background: var(--bg-color);
+    font-size:14px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* スマホ表示の調整 */
+@media (max-width: 600px) {
+    .lesson-content {
+        padding: 24px 20px;
+    }
 }
 </style>
 </head>
@@ -171,145 +175,112 @@ footer{
 <body>
 
 <header>
-    <h1>メーカー勤務理系おじさんの資格勉強ノート</h1>
+    <h1>📘 StudyText Online</h1>
     <div class="tabs" id="tabs">
-        <button class="tab active">X線</button>
-        <button class="tab">危険物</button>
-        <button class="tab">QC</button>
-        <button class="tab">FP</button>
-        <button class="tab add-tab">＋</button>
+        <button class="tab active" data-subject="xray">X線作業主任者</button>
+        <button class="tab" data-subject="kiken">危険物取扱者</button>
+        <button class="tab" data-subject="qc">QC検定</button>
     </div>
 </header>
 
 <main>
-    <div class="ad">Advertisement</div>
-
-    <div class="note">
-        <h2 id="noteTitle">X線</h2>
-        <textarea id="noteText" placeholder="ここに勉強メモを書き込みます..."></textarea>
-    </div>
-
-    <div class="ad">Advertisement</div>
-
-    <div class="note">
-        <h2>暗記ポイント</h2>
-        <textarea placeholder="重要ポイントを記録..."></textarea>
-    </div>
+    <div class="lesson-content" id="contentArea"></div>
 </main>
 
 <footer>
-    © 2026 Personal Study Notes
+    © 2026 StudyText Online Learning
 </footer>
 
 <script>
-// --- JavaScriptは元のロジックを活かしつつ、少しだけ整理しています ---
-const tabsContainer = document.getElementById("tabs");
-const note = document.getElementById("noteText");
-const title = document.getElementById("noteTitle");
+// 教材のデータ（ここでサイトの内容を管理します）
+// HTMLタグを使って、見出しやリスト、重要ボックスなどを自由にデザインできます。
+const courseData = {
+    "xray": `
+        <h2>X線作業主任者 第1章：基礎知識</h2>
+        <p>X線作業主任者の試験において、最も基本となるのが「放射線の種類」と「管理区域」の概念です。ここでは試験に出やすいポイントを絞って解説します。</p>
+        
+        <h3>1. 放射線の種類と性質</h3>
+        <p>エックス線は電磁波の一種であり、物質を透過する能力を持っています。透過力は物質の密度や原子番号によって異なります。</p>
+        <ul>
+            <li><strong>電離作用：</strong> 物質を通過する際、原子から電子を弾き飛ばす作用。</li>
+            <li><strong>透過作用：</strong> 物質を通り抜ける性質。鉛などの重金属で遮蔽する。</li>
+            <li><strong>写真作用：</strong> 写真フィルムを感光させる作用。</li>
+        </ul>
 
-let currentSubject = "X線";
+        <div class="important-box">
+            <strong>💡 試験の頻出ポイント</strong>
+            「半価層（はんかそう）」とは、エックス線の線量を半分（1/2）に減らすために必要な遮蔽材の厚さのことです。試験では必ず計算問題や定義が問われます。
+        </div>
 
-loadSubjects();
-setupTabs();
-loadNote(currentSubject);
+        <h3>2. 管理区域の定義</h3>
+        <p>実効線量が3ヶ月間に1.3mSvを超えるおそれのある区域を「管理区域」として指定し、標識を設ける必要があります。</p>
+    `,
+    "kiken": `
+        <h2>危険物取扱者 乙種4類：物理と化学</h2>
+        <p>乙種4類（引火性液体）の性質を理解する前に、まずは基礎的な物理と化学の法則を復習しましょう。</p>
+        
+        <h3>1. 燃焼の3要素</h3>
+        <p>物質が燃えるためには、以下の3つの条件がすべて揃う必要があります。これを燃焼の3要素と呼びます。</p>
+        <ul>
+            <li>可燃物（燃えるもの）</li>
+            <li>酸素供給体（空気など）</li>
+            <li>点火源（火花や静電気など）</li>
+        </ul>
 
-function setupTabs(){
-    const tabs = document.querySelectorAll(".tab");
+        <div class="important-box">
+            <strong>⚠️ 消火の基本</strong>
+            消火とは、この「燃焼の3要素」のうち、どれか1つ以上を取り除く作業のことです（窒息消火、冷却消火、除去消火）。
+        </div>
+    `,
+    "qc": `
+        <h2>QC検定（品質管理検定） 入門</h2>
+        <p>品質管理（Quality Control）の基本となる考え方と、QC七つ道具について学びます。</p>
+        
+        <h3>QC七つ道具とは？</h3>
+        <p>データを視覚的に整理し、問題の発見や解決に役立てるためのツール群です。</p>
+        <ul>
+            <li>パレート図</li>
+            <li>特性要因図（フィッシュボーン・チャート）</li>
+            <li>ヒストグラム</li>
+            <li>散布図</li>
+            <li>管理図</li>
+            <li>チェックシート</li>
+            <li>層別</li>
+        </ul>
+    `
+};
 
-    tabs.forEach(tab=>{
-        if(tab.classList.contains("add-tab")) return;
+// 要素の取得
+const tabs = document.querySelectorAll(".tab");
+const contentArea = document.getElementById("contentArea");
 
-        let pressTimer;
+// 初期表示
+loadLesson("xray");
 
-        // タップ処理
-        tab.onclick = ()=>{
-            document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-            tab.classList.add("active");
-            currentSubject = tab.textContent;
-            title.textContent = currentSubject;
-            loadNote(currentSubject);
-        };
+// タブ切り替えのイベント設定
+tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+        // アクティブなタブの切り替え
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
 
-        // 長押し処理（削除）
-        tab.addEventListener("touchstart",() => pressTimer = setTimeout(() => deleteSubject(tab), 1000));
-        tab.addEventListener("mousedown",() => pressTimer = setTimeout(() => deleteSubject(tab), 1000));
-
-        // 長押しキャンセル
-        ["touchend", "touchcancel", "mouseup", "mouseleave"].forEach(event => {
-            tab.addEventListener(event, () => clearTimeout(pressTimer));
-        });
+        // 該当するデータを読み込み
+        const subjectId = tab.getAttribute("data-subject");
+        loadLesson(subjectId);
     });
-}
+});
 
-function deleteSubject(tab){
-    const subject = tab.textContent;
-    if(!confirm(`「${subject}」を削除しますか？`)) return;
-
-    localStorage.removeItem("note_" + subject);
-    tab.remove();
-    saveSubjects();
-
-    const firstTab = document.querySelector(".tab:not(.add-tab)");
-    if(firstTab){
-        firstTab.classList.add("active");
-        currentSubject = firstTab.textContent;
-        title.textContent = currentSubject;
-        loadNote(currentSubject);
-    }else{
-        currentSubject = "";
-        title.textContent = "ノート";
-        note.value = "";
+// 教材データを表示する関数
+function loadLesson(subjectId) {
+    // データが存在すれば表示、なければ準備中メッセージ
+    if (courseData[subjectId]) {
+        contentArea.innerHTML = courseData[subjectId];
+    } else {
+        contentArea.innerHTML = "<h2>準備中</h2><p>この科目のコンテンツは現在作成中です。</p>";
     }
-}
-
-// メモの保存
-note.addEventListener("input",()=>{
-    localStorage.setItem("note_" + currentSubject, note.value);
-});
-
-// メモの読み込み
-function loadNote(subject){
-    const saved = localStorage.getItem("note_" + subject);
-    note.value = saved || `【${subject}】\n\nここに勉強メモを書く\n\n例:\n・管理区域\n・実効線量\n・等価線量\n・半価層`;
-}
-
-// ＋ボタンの処理
-document.querySelector(".add-tab").addEventListener("click",()=>{
-    const name = prompt("資格名を入力してください");
-    if(!name) return;
-    createTab(name);
-    saveSubjects();
-});
-
-// タブの作成
-function createTab(name){
-    const btn = document.createElement("button");
-    btn.className = "tab";
-    btn.textContent = name;
-    tabsContainer.insertBefore(btn, document.querySelector(".add-tab"));
-    setupTabs();
-}
-
-// 資格一覧の保存
-function saveSubjects(){
-    const subjects = Array.from(document.querySelectorAll(".tab:not(.add-tab)")).map(tab => tab.textContent);
-    localStorage.setItem("subjects", JSON.stringify(subjects));
-}
-
-// 資格一覧の読み込み
-function loadSubjects(){
-    const saved = JSON.parse(localStorage.getItem("subjects"));
-    if(!saved) return;
-
-    document.querySelectorAll(".tab:not(.add-tab)").forEach(tab=>tab.remove());
-
-    saved.forEach(subject=>{
-        const btn = document.createElement("button");
-        btn.className = "tab";
-        if(subject === currentSubject) btn.classList.add("active");
-        btn.textContent = subject;
-        tabsContainer.insertBefore(btn, document.querySelector(".add-tab"));
-    });
+    
+    // スクロールを一番上に戻す
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 
