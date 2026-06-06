@@ -115,16 +115,15 @@ footer{
 
 <h1>📚 個人用勉強ノート</h1>
 
-<div class="tabs">
+<div class="tabs" id="tabs">
+
     <button class="tab active">X線</button>
     <button class="tab">危険物</button>
     <button class="tab">QC</button>
     <button class="tab">FP</button>
-    <button class="tab">IT</button>
-    <button class="tab">宅建</button>
-    <button class="tab">簿記</button>
-    <button class="tab">英語</button>
-    <button class="tab">追加</button>
+
+    <button class="tab add-tab">＋</button>
+
 </div>
 
 </header>
@@ -173,38 +172,51 @@ footer{
 
 <script>
 
-const tabs = document.querySelectorAll(".tab");
+const tabsContainer = document.getElementById("tabs");
 const note = document.getElementById("noteText");
 const title = document.querySelector(".note h2");
 
 let currentSubject = "X線";
 
+// 保存済み資格一覧を復元
+loadSubjects();
+
+// 初期イベント登録
+setupTabs();
+
 // 初期表示
 loadNote(currentSubject);
 
-tabs.forEach(tab => {
+function setupTabs(){
 
-    tab.addEventListener("click", () => {
+    const tabs = document.querySelectorAll(".tab");
 
-        // 見た目切替
-        tabs.forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+    tabs.forEach(tab=>{
 
-        // 現在科目変更
-        currentSubject = tab.textContent;
+        if(tab.classList.contains("add-tab")) return;
 
-        // タイトル変更
-        title.textContent = currentSubject;
+        tab.onclick = ()=>{
 
-        // メモ読込
-        loadNote(currentSubject);
+            document
+                .querySelectorAll(".tab")
+                .forEach(t=>t.classList.remove("active"));
+
+            tab.classList.add("active");
+
+            currentSubject = tab.textContent;
+
+            title.textContent = currentSubject;
+
+            loadNote(currentSubject);
+
+        };
 
     });
 
-});
+}
 
-// 保存
-note.addEventListener("input", () => {
+// メモ保存
+note.addEventListener("input",()=>{
 
     localStorage.setItem(
         "note_" + currentSubject,
@@ -213,23 +225,108 @@ note.addEventListener("input", () => {
 
 });
 
-// 読込
+// メモ読込
 function loadNote(subject){
 
-    const saved = localStorage.getItem(
-        "note_" + subject
-    );
+    const saved =
+        localStorage.getItem("note_" + subject);
 
-    if(saved){
-        note.value = saved;
-    }else{
-        note.value =
+    note.value =
+        saved ||
 `【${subject}】
 
 ここに勉強メモを書く
 
 `;
-    }
+
+}
+
+// ＋ボタン
+document
+.querySelector(".add-tab")
+.addEventListener("click",()=>{
+
+    const name = prompt("資格名を入力");
+
+    if(!name) return;
+
+    createTab(name);
+
+    saveSubjects();
+
+});
+
+// タブ作成
+function createTab(name){
+
+    const btn =
+        document.createElement("button");
+
+    btn.className = "tab";
+    btn.textContent = name;
+
+    tabsContainer.insertBefore(
+        btn,
+        document.querySelector(".add-tab")
+    );
+
+    setupTabs();
+
+}
+
+// 資格一覧保存
+function saveSubjects(){
+
+    const subjects = [];
+
+    document
+    .querySelectorAll(".tab:not(.add-tab)")
+    .forEach(tab=>{
+
+        subjects.push(tab.textContent);
+
+    });
+
+    localStorage.setItem(
+        "subjects",
+        JSON.stringify(subjects)
+    );
+
+}
+
+// 資格一覧読込
+function loadSubjects(){
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem("subjects")
+        );
+
+    if(!saved) return;
+
+    document
+    .querySelectorAll(".tab:not(.add-tab)")
+    .forEach(tab=>tab.remove());
+
+    saved.forEach(subject=>{
+
+        const btn =
+            document.createElement("button");
+
+        btn.className = "tab";
+
+        if(subject==="X線"){
+            btn.classList.add("active");
+        }
+
+        btn.textContent = subject;
+
+        tabsContainer.insertBefore(
+            btn,
+            document.querySelector(".add-tab")
+        );
+
+    });
 
 }
 
