@@ -173,26 +173,65 @@ footer{
 
 <script>
 
-// タブ切替見た目
 const tabs = document.querySelectorAll(".tab");
+const note = document.getElementById("noteText");
+const title = document.querySelector(".note h2");
 
-tabs.forEach(tab=>{
-    tab.addEventListener("click",()=>{
+let currentSubject = "X線";
 
-        tabs.forEach(t=>t.classList.remove("active"));
+// 初期表示
+loadNote(currentSubject);
+
+tabs.forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+        // 見た目切替
+        tabs.forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
 
+        // 現在科目変更
+        currentSubject = tab.textContent;
+
+        // タイトル変更
+        title.textContent = currentSubject;
+
+        // メモ読込
+        loadNote(currentSubject);
+
     });
+
 });
 
-// 自動保存
-const note = document.getElementById("noteText");
+// 保存
+note.addEventListener("input", () => {
 
-note.value = localStorage.getItem("xrayNote") || note.value;
+    localStorage.setItem(
+        "note_" + currentSubject,
+        note.value
+    );
 
-note.addEventListener("input",()=>{
-    localStorage.setItem("xrayNote",note.value);
 });
+
+// 読込
+function loadNote(subject){
+
+    const saved = localStorage.getItem(
+        "note_" + subject
+    );
+
+    if(saved){
+        note.value = saved;
+    }else{
+        note.value =
+`【${subject}】
+
+ここに勉強メモを書く
+
+`;
+    }
+
+}
 
 </script>
 
