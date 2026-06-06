@@ -7,13 +7,13 @@
 
 <style>
 :root {
-    --primary-color: #0ea5e9; /* 教材サイトらしい爽やかなスカイブルー */
+    --primary-color: #0ea5e9;
     --bg-color: #f8fafc;
     --surface-color: #ffffff;
     --text-main: #334155;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
-    --accent-bg: #f0f9ff; /* 重要ポイントの背景色 */
+    --accent-bg: #f0f9ff;
 }
 
 *{
@@ -51,7 +51,7 @@ h1{
 /* タブナビゲーション */
 .tabs{
     display:flex;
-    justify-content: center; /* 中央寄せにしてサイトメニューっぽく */
+    justify-content: center;
     overflow-x:auto;
     gap:8px;
     padding:12px 16px;
@@ -66,11 +66,12 @@ h1{
     font-size: 15px;
     font-weight: 600;
     border:none;
-    border-radius: 8px; /* ピル型から角丸四角へ（よりサイトらしく） */
+    border-radius: 8px;
     background: transparent;
     color: var(--text-muted);
     cursor:pointer;
     transition: all 0.2s ease;
+    white-space: nowrap; /* 文字落ち防止 */
 }
 
 .tab:hover {
@@ -87,11 +88,10 @@ h1{
 /* メインコンテンツ */
 main{
     padding: 30px 16px;
-    max-width: 760px; /* 読みやすい横幅に制限 */
+    max-width: 760px;
     margin: 0 auto;
 }
 
-/* コンテンツ表示エリア（教科書スタイル） */
 .lesson-content {
     background: var(--surface-color);
     border-radius:16px;
@@ -100,7 +100,7 @@ main{
     margin-bottom: 40px;
 }
 
-/* 教材内のタイポグラフィ（見出しや段落の装飾） */
+/* タイポグラフィ */
 .lesson-content h2 {
     font-size: 24px;
     color: #0f172a;
@@ -139,7 +139,6 @@ main{
     margin-bottom: 8px;
 }
 
-/* 重要ポイントのボックス */
 .important-box {
     background: var(--accent-bg);
     border-left: 4px solid var(--primary-color);
@@ -163,7 +162,6 @@ footer{
     border-top: 1px solid var(--border-color);
 }
 
-/* スマホ表示の調整 */
 @media (max-width: 600px) {
     .lesson-content {
         padding: 24px 20px;
@@ -176,11 +174,7 @@ footer{
 
 <header>
     <h1>📘 StudyText Online</h1>
-    <div class="tabs" id="tabs">
-        <button class="tab active" data-subject="xray">Study</button>
-        <button class="tab" data-subject="kiken">Notes</button>
-        <button class="tab" data-subject="qc">Chill</button>
-    </div>
+    <div class="tabs" id="tabs"></div>
 </header>
 
 <main>
@@ -188,100 +182,117 @@ footer{
 </main>
 
 <footer>
-    © 2026 メーカー勤務理系おじさんの資格勉強ノート
+    © 2026 StudyText Online Learning
 </footer>
 
 <script>
-// 教材のデータ（ここでサイトの内容を管理します）
-// HTMLタグを使って、見出しやリスト、重要ボックスなどを自由にデザインできます。
-const courseData = {
-    "xray": `
-        <h2>X線作業主任者 第1章：基礎知識</h2>
-        <p>X線作業主任者の試験において、最も基本となるのが「放射線の種類」と「管理区域」の概念です。ここでは試験に出やすいポイントを絞って解説します。</p>
-        
-        <h3>1. 放射線の種類と性質</h3>
-        <p>エックス線は電磁波の一種であり、物質を透過する能力を持っています。透過力は物質の密度や原子番号によって異なります。</p>
-        <ul>
-            <li><strong>電離作用：</strong> 物質を通過する際、原子から電子を弾き飛ばす作用。</li>
-            <li><strong>透過作用：</strong> 物質を通り抜ける性質。鉛などの重金属で遮蔽する。</li>
-            <li><strong>写真作用：</strong> 写真フィルムを感光させる作用。</li>
-        </ul>
+// ==========================================
+// 💡 設定エリア：ここだけを編集すればOKです！
+// ==========================================
+const courseData = [
+    {
+        id: "xray",
+        tabName: "X線作業主任者",  // ← ここを変えればタブの名前も変わります！
+        content: `
+            <h2>X線作業主任者 第1章：基礎知識</h2>
+            <p>X線作業主任者の試験において、最も基本となるのが「放射線の種類」と「管理区域」の概念です。</p>
+            <h3>1. 放射線の種類と性質</h3>
+            <p>エックス線は電磁波の一種であり、物質を透過する能力を持っています。</p>
+            <ul>
+                <li><strong>電離作用：</strong> 物質を通過する際、原子から電子を弾き飛ばす作用。</li>
+                <li><strong>透過作用：</strong> 物質を通り抜ける性質。鉛などの重金属で遮蔽する。</li>
+            </ul>
+        `
+    },
+    {
+        id: "kiken",
+        tabName: "危険物取扱者",
+        content: `
+            <h2>危険物取扱者 乙種4類：物理と化学</h2>
+            <p>乙種4類（引火性液体）の性質を理解する前に、まずは基礎的な物理と化学の法則を復習しましょう。</p>
+            <h3>1. 燃焼の3要素</h3>
+            <ul>
+                <li>可燃物（燃えるもの）</li>
+                <li>酸素供給体（空気など）</li>
+                <li>点火源（火花や静電気など）</li>
+            </ul>
+        `
+    },
+    {
+        id: "qc",
+        tabName: "QC検定",
+        content: `
+            <h2>QC検定（品質管理検定） 入門</h2>
+            <p>品質管理（Quality Control）の基本となる考え方と、QC七つ道具について学びます。</p>
+            <h3>QC七つ道具とは？</h3>
+            <p>データを視覚的に整理し、問題の発見や解決に役立てるためのツール群です。</p>
+        `
+    },
+    {
+        id: "fp",
+        tabName: "FP3級",
+        content: `
+            <h2>FP3級 ライフプランニング</h2>
+            <p>人生の夢や目標をかなえるために、資金計画を立てることをライフプランニングといいます。</p>
+            <div class="important-box">
+                <strong>💡 社会保険の基本</strong>
+                健康保険、年金、雇用保険などの基礎知識は必ず出題されます。
+            </div>
+        `
+    }
+];
+// ==========================================
+// これ以降のシステム部分は自動で動くので編集不要です
+// ==========================================
 
-        <div class="important-box">
-            <strong>💡 試験の頻出ポイント</strong>
-            「半価層（はんかそう）」とは、エックス線の線量を半分（1/2）に減らすために必要な遮蔽材の厚さのことです。試験では必ず計算問題や定義が問われます。
-        </div>
-
-        <h3>2. 管理区域の定義</h3>
-        <p>実効線量が3ヶ月間に1.3mSvを超えるおそれのある区域を「管理区域」として指定し、標識を設ける必要があります。</p>
-    `,
-    "kiken": `
-        <h2>危険物取扱者 乙種4類：物理と化学</h2>
-        <p>乙種4類（引火性液体）の性質を理解する前に、まずは基礎的な物理と化学の法則を復習しましょう。</p>
-        
-        <h3>1. 燃焼の3要素</h3>
-        <p>物質が燃えるためには、以下の3つの条件がすべて揃う必要があります。これを燃焼の3要素と呼びます。</p>
-        <ul>
-            <li>可燃物（燃えるもの）</li>
-            <li>酸素供給体（空気など）</li>
-            <li>点火源（火花や静電気など）</li>
-        </ul>
-
-        <div class="important-box">
-            <strong>⚠️ 消火の基本</strong>
-            消火とは、この「燃焼の3要素」のうち、どれか1つ以上を取り除く作業のことです（窒息消火、冷却消火、除去消火）。
-        </div>
-    `,
-    "qc": `
-        <h2>QC検定（品質管理検定） 入門</h2>
-        <p>品質管理（Quality Control）の基本となる考え方と、QC七つ道具について学びます。</p>
-        
-        <h3>QC七つ道具とは？</h3>
-        <p>データを視覚的に整理し、問題の発見や解決に役立てるためのツール群です。</p>
-        <ul>
-            <li>パレート図</li>
-            <li>特性要因図（フィッシュボーン・チャート）</li>
-            <li>ヒストグラム</li>
-            <li>散布図</li>
-            <li>管理図</li>
-            <li>チェックシート</li>
-            <li>層別</li>
-        </ul>
-    `
-};
-
-// 要素の取得
-const tabs = document.querySelectorAll(".tab");
+const tabsContainer = document.getElementById("tabs");
 const contentArea = document.getElementById("contentArea");
 
-// 初期表示
-loadLesson("xray");
+// 1. タブを自動生成する関数
+function initializeSite() {
+    courseData.forEach((course, index) => {
+        // ボタン要素を作成
+        const btn = document.createElement("button");
+        btn.className = "tab";
+        btn.textContent = course.tabName; // データからタブ名をセット
+        
+        // 最初の一つだけ「active」状態にする
+        if (index === 0) {
+            btn.classList.add("active");
+            loadLesson(course.id); // 最初のコンテンツを表示
+        }
 
-// タブ切り替えのイベント設定
-tabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-        // アクティブなタブの切り替え
-        tabs.forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+        // タップした時の動き
+        btn.addEventListener("click", () => {
+            // 全てのタブからactiveを外して、クリックしたタブに付ける
+            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+            btn.classList.add("active");
+            
+            // 該当するコンテンツを表示
+            loadLesson(course.id);
+        });
 
-        // 該当するデータを読み込み
-        const subjectId = tab.getAttribute("data-subject");
-        loadLesson(subjectId);
+        // ヘッダーにボタンを追加
+        tabsContainer.appendChild(btn);
     });
-});
+}
 
-// 教材データを表示する関数
+// 2. 教材データを表示する関数
 function loadLesson(subjectId) {
-    // データが存在すれば表示、なければ準備中メッセージ
-    if (courseData[subjectId]) {
-        contentArea.innerHTML = courseData[subjectId];
+    // IDが一致するデータを検索
+    const course = courseData.find(item => item.id === subjectId);
+    
+    if (course) {
+        contentArea.innerHTML = course.content;
     } else {
         contentArea.innerHTML = "<h2>準備中</h2><p>この科目のコンテンツは現在作成中です。</p>";
     }
     
-    // スクロールを一番上に戻す
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// サイトを開いた時に実行
+initializeSite();
 </script>
 
 </body>
