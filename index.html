@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>個人用勉強ノート</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#f5f5f5;
+    color:#333;
+}
+
+/* ヘッダー */
+header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:white;
+    border-bottom:1px solid #ddd;
+}
+
+h1{
+    margin:0;
+    padding:12px;
+    font-size:20px;
+    text-align:center;
+}
+
+/* タブ */
+.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:8px;
+    padding:10px;
+    border-top:1px solid #eee;
+}
+
+.tabs::-webkit-scrollbar{
+    display:none;
+}
+
+.tab{
+    min-width:60px;
+    height:40px;
+    border:none;
+    border-radius:10px;
+    background:#e0e0e0;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.tab.active{
+    background:#4a90e2;
+    color:white;
+}
+
+/* メイン */
+main{
+    padding:12px;
+}
+
+/* 広告 */
+.ad{
+    background:white;
+    border:2px dashed #bbb;
+    padding:20px;
+    text-align:center;
+    margin:15px 0;
+    border-radius:12px;
+}
+
+/* ノート */
+.note{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+
+.note h2{
+    margin-top:0;
+}
+
+textarea{
+    width:100%;
+    min-height:250px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    padding:10px;
+    resize:vertical;
+    font-size:16px;
+}
+
+/* フッター */
+footer{
+    text-align:center;
+    padding:20px;
+    color:#777;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>📚 個人用勉強ノート</h1>
+
+<div class="tabs">
+    <button class="tab active">X線</button>
+    <button class="tab">危険物</button>
+    <button class="tab">QC</button>
+    <button class="tab">FP</button>
+    <button class="tab">IT</button>
+    <button class="tab">宅建</button>
+    <button class="tab">簿記</button>
+    <button class="tab">英語</button>
+    <button class="tab">追加</button>
+</div>
+
+</header>
+
+<main>
+
+<div class="ad">
+    広告スペース①
+</div>
+
+<div class="note">
+    <h2>X線作業主任者</h2>
+
+    <textarea id="noteText">
+ここに勉強メモを書く
+
+例
+・管理区域
+・実効線量
+・等価線量
+・半価層
+    </textarea>
+</div>
+
+<div class="ad">
+    広告スペース②
+</div>
+
+<div class="note">
+    <h2>暗記ポイント</h2>
+
+    <textarea>
+重要ポイントを記録
+    </textarea>
+</div>
+
+<div class="ad">
+    広告スペース③
+</div>
+
+</main>
+
+<footer>
+© Personal Study Notes
+</footer>
+
+<script>
+
+// タブ切替見た目
+const tabs = document.querySelectorAll(".tab");
+
+tabs.forEach(tab=>{
+    tab.addEventListener("click",()=>{
+
+        tabs.forEach(t=>t.classList.remove("active"));
+        tab.classList.add("active");
+
+    });
+});
+
+// 自動保存
+const note = document.getElementById("noteText");
+
+note.value = localStorage.getItem("xrayNote") || note.value;
+
+note.addEventListener("input",()=>{
+    localStorage.setItem("xrayNote",note.value);
+});
+
+</script>
+
+</body>
+</html>
