@@ -195,6 +195,9 @@ function setupTabs(){
 
         if(tab.classList.contains("add-tab")) return;
 
+        let pressTimer;
+
+        // タップ
         tab.onclick = ()=>{
 
             document
@@ -211,7 +214,92 @@ function setupTabs(){
 
         };
 
+        // 長押し開始
+        tab.addEventListener("touchstart",()=>{
+
+            pressTimer = setTimeout(()=>{
+
+                deleteSubject(tab);
+
+            },1000);
+
+        });
+
+        tab.addEventListener("mousedown",()=>{
+
+            pressTimer = setTimeout(()=>{
+
+                deleteSubject(tab);
+
+            },1000);
+
+        });
+
+        // 長押し解除
+        [
+            "touchend",
+            "touchcancel",
+            "mouseup",
+            "mouseleave"
+        ].forEach(event=>{
+
+            tab.addEventListener(event,()=>{
+
+                clearTimeout(pressTimer);
+
+            });
+
+        });
+
     });
+
+}
+
+//長押し削除
+function deleteSubject(tab){
+
+    const subject = tab.textContent;
+
+    const result = confirm(
+        `「${subject}」を削除しますか？`
+    );
+
+    if(!result) return;
+
+    localStorage.removeItem(
+        "note_" + subject
+    );
+
+    tab.remove();
+
+    saveSubjects();
+
+    const firstTab =
+        document.querySelector(
+            ".tab:not(.add-tab)"
+        );
+
+    if(firstTab){
+
+        firstTab.classList.add("active");
+
+        currentSubject =
+            firstTab.textContent;
+
+        title.textContent =
+            currentSubject;
+
+        loadNote(currentSubject);
+
+    }else{
+
+        currentSubject = "";
+
+        title.textContent = "ノート";
+
+        note.value = "";
+
+    }
 
 }
 
