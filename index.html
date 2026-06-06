@@ -6,40 +6,54 @@
 <title>個人用勉強ノート</title>
 
 <style>
+:root {
+    /* カラーパレットの設定 */
+    --primary-color: #4f46e5; /* 上品なインディゴブルー */
+    --bg-color: #f3f4f6;      /* 柔らかいライトグレー */
+    --surface-color: #ffffff; /* カードの背景色 */
+    --text-main: #1f2937;     /* 濃いグレー（真っ黒より目に優しい） */
+    --text-muted: #6b7280;    /* サブテキスト用 */
+    --border-color: #e5e7eb;  /* 境界線用 */
+}
+
 *{
     box-sizing:border-box;
 }
 
 body{
     margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-    background:#f5f5f5;
-    color:#333;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
 }
 
-/* ヘッダー */
+/* ヘッダー（すりガラス効果） */
 header{
     position:sticky;
     top:0;
     z-index:100;
-    background:white;
-    border-bottom:1px solid #ddd;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px); /* すりガラス効果 */
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 h1{
     margin:0;
-    padding:12px;
-    font-size:20px;
+    padding:16px 12px 8px;
+    font-size:22px;
+    font-weight: 700;
     text-align:center;
+    letter-spacing: 0.5px;
 }
 
 /* タブ */
 .tabs{
     display:flex;
     overflow-x:auto;
-    gap:8px;
-    padding:10px;
-    border-top:1px solid #eee;
+    gap:10px;
+    padding:12px 16px;
 }
 
 .tabs::-webkit-scrollbar{
@@ -47,64 +61,109 @@ h1{
 }
 
 .tab{
-    min-width:60px;
-    height:40px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 600;
     border:none;
-    border-radius:10px;
-    background:#e0e0e0;
+    border-radius: 999px; /* ピル型（完全な角丸） */
+    background: var(--surface-color);
+    color: var(--text-muted);
     cursor:pointer;
     flex-shrink:0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: all 0.2s ease; /* ホバーなどのアニメーションを滑らかに */
+}
+
+.tab:hover {
+    background: #f9fafb;
+    color: var(--text-main);
 }
 
 .tab.active{
-    background:#4a90e2;
-    color:white;
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); /* アクティブ時だけ影を強調 */
 }
 
-/* メイン */
+.add-tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px dashed #ccc;
+    box-shadow: none;
+}
+
+.add-tab:hover {
+    background: #e5e7eb;
+}
+
+/* メインコンテンツ */
 main{
-    padding:12px;
+    padding: 20px 16px;
+    max-width: 800px;
+    margin: 0 auto; /* PC表示の際に中央寄せ */
 }
 
-/* 広告 */
+/* 広告（悪目立ちしないように調整） */
 .ad{
-    background:white;
-    border:2px dashed #bbb;
-    padding:20px;
+    background: #f9fafb;
+    border: 1px solid var(--border-color);
+    color: #9ca3af;
+    padding:15px;
     text-align:center;
-    margin:15px 0;
+    margin: 20px 0;
     border-radius:12px;
+    font-size: 12px;
 }
 
-/* ノート */
+/* ノートカード */
 .note{
-    background:white;
-    border-radius:12px;
-    padding:15px;
-    margin-bottom:15px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    background: var(--surface-color);
+    border-radius:16px;
+    padding: 24px;
+    margin-bottom:24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* 広く薄い高級感のある影 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.note:focus-within {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08); /* 入力時に少し浮き上がる演出 */
+    transform: translateY(-2px);
 }
 
 .note h2{
     margin-top:0;
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: var(--text-main);
+    border-left: 4px solid var(--primary-color); /* 左にアクセントライン */
+    padding-left: 10px;
 }
 
+/* テキストエリア（シームレスに） */
 textarea{
     width:100%;
-    min-height:250px;
-    border:1px solid #ccc;
-    border-radius:10px;
-    padding:10px;
+    min-height:280px;
+    border: none;
+    background: transparent;
+    padding: 0;
     resize:vertical;
     font-size:16px;
+    font-family: inherit;
+    line-height: 1.8;
+    color: var(--text-main);
+}
+
+textarea:focus {
+    outline: none; /* デフォルトの青い枠線を消す */
 }
 
 /* フッター */
 footer{
     text-align:center;
-    padding:20px;
-    color:#777;
-    font-size:14px;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size:13px;
+    background: var(--bg-color);
 }
 </style>
 </head>
@@ -112,312 +171,146 @@ footer{
 <body>
 
 <header>
-
-<h1>📚 個人用勉強ノート</h1>
-
-<div class="tabs" id="tabs">
-
-    <button class="tab active">X線</button>
-    <button class="tab">危険物</button>
-    <button class="tab">QC</button>
-    <button class="tab">FP</button>
-
-    <button class="tab add-tab">＋</button>
-
-</div>
-
+    <h1>📚 Study Notes</h1>
+    <div class="tabs" id="tabs">
+        <button class="tab active">X線</button>
+        <button class="tab">危険物</button>
+        <button class="tab">QC</button>
+        <button class="tab">FP</button>
+        <button class="tab add-tab">＋</button>
+    </div>
 </header>
 
 <main>
+    <div class="ad">Advertisement</div>
 
-<div class="ad">
-    広告スペース①
-</div>
+    <div class="note">
+        <h2 id="noteTitle">X線</h2>
+        <textarea id="noteText" placeholder="ここに勉強メモを書き込みます..."></textarea>
+    </div>
 
-<div class="note">
-    <h2>X線作業主任者</h2>
+    <div class="ad">Advertisement</div>
 
-    <textarea id="noteText">
-ここに勉強メモを書く
-
-例
-・管理区域
-・実効線量
-・等価線量
-・半価層
-    </textarea>
-</div>
-
-<div class="ad">
-    広告スペース②
-</div>
-
-<div class="note">
-    <h2>暗記ポイント</h2>
-
-    <textarea>
-重要ポイントを記録
-    </textarea>
-</div>
-
-<div class="ad">
-    広告スペース③
-</div>
-
+    <div class="note">
+        <h2>暗記ポイント</h2>
+        <textarea placeholder="重要ポイントを記録..."></textarea>
+    </div>
 </main>
 
 <footer>
-© Personal Study Notes
+    © 2026 Personal Study Notes
 </footer>
 
 <script>
-
+// --- JavaScriptは元のロジックを活かしつつ、少しだけ整理しています ---
 const tabsContainer = document.getElementById("tabs");
 const note = document.getElementById("noteText");
-const title = document.querySelector(".note h2");
+const title = document.getElementById("noteTitle");
 
 let currentSubject = "X線";
 
-// 保存済み資格一覧を復元
 loadSubjects();
-
-// 初期イベント登録
 setupTabs();
-
-// 初期表示
 loadNote(currentSubject);
 
 function setupTabs(){
-
     const tabs = document.querySelectorAll(".tab");
 
     tabs.forEach(tab=>{
-
         if(tab.classList.contains("add-tab")) return;
 
         let pressTimer;
 
-        // タップ
+        // タップ処理
         tab.onclick = ()=>{
-
-            document
-                .querySelectorAll(".tab")
-                .forEach(t=>t.classList.remove("active"));
-
+            document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
             tab.classList.add("active");
-
             currentSubject = tab.textContent;
-
             title.textContent = currentSubject;
-
             loadNote(currentSubject);
-
         };
 
-        // 長押し開始
-        tab.addEventListener("touchstart",()=>{
+        // 長押し処理（削除）
+        tab.addEventListener("touchstart",() => pressTimer = setTimeout(() => deleteSubject(tab), 1000));
+        tab.addEventListener("mousedown",() => pressTimer = setTimeout(() => deleteSubject(tab), 1000));
 
-            pressTimer = setTimeout(()=>{
-
-                deleteSubject(tab);
-
-            },1000);
-
+        // 長押しキャンセル
+        ["touchend", "touchcancel", "mouseup", "mouseleave"].forEach(event => {
+            tab.addEventListener(event, () => clearTimeout(pressTimer));
         });
-
-        tab.addEventListener("mousedown",()=>{
-
-            pressTimer = setTimeout(()=>{
-
-                deleteSubject(tab);
-
-            },1000);
-
-        });
-
-        // 長押し解除
-        [
-            "touchend",
-            "touchcancel",
-            "mouseup",
-            "mouseleave"
-        ].forEach(event=>{
-
-            tab.addEventListener(event,()=>{
-
-                clearTimeout(pressTimer);
-
-            });
-
-        });
-
     });
-
 }
 
-//長押し削除
 function deleteSubject(tab){
-
     const subject = tab.textContent;
+    if(!confirm(`「${subject}」を削除しますか？`)) return;
 
-    const result = confirm(
-        `「${subject}」を削除しますか？`
-    );
-
-    if(!result) return;
-
-    localStorage.removeItem(
-        "note_" + subject
-    );
-
+    localStorage.removeItem("note_" + subject);
     tab.remove();
-
     saveSubjects();
 
-    const firstTab =
-        document.querySelector(
-            ".tab:not(.add-tab)"
-        );
-
+    const firstTab = document.querySelector(".tab:not(.add-tab)");
     if(firstTab){
-
         firstTab.classList.add("active");
-
-        currentSubject =
-            firstTab.textContent;
-
-        title.textContent =
-            currentSubject;
-
+        currentSubject = firstTab.textContent;
+        title.textContent = currentSubject;
         loadNote(currentSubject);
-
     }else{
-
         currentSubject = "";
-
         title.textContent = "ノート";
-
         note.value = "";
-
     }
-
 }
 
-// メモ保存
+// メモの保存
 note.addEventListener("input",()=>{
-
-    localStorage.setItem(
-        "note_" + currentSubject,
-        note.value
-    );
-
+    localStorage.setItem("note_" + currentSubject, note.value);
 });
 
-// メモ読込
+// メモの読み込み
 function loadNote(subject){
-
-    const saved =
-        localStorage.getItem("note_" + subject);
-
-    note.value =
-        saved ||
-`【${subject}】
-
-ここに勉強メモを書く
-
-`;
-
+    const saved = localStorage.getItem("note_" + subject);
+    note.value = saved || `【${subject}】\n\nここに勉強メモを書く\n\n例:\n・管理区域\n・実効線量\n・等価線量\n・半価層`;
 }
 
-// ＋ボタン
-document
-.querySelector(".add-tab")
-.addEventListener("click",()=>{
-
-    const name = prompt("資格名を入力");
-
+// ＋ボタンの処理
+document.querySelector(".add-tab").addEventListener("click",()=>{
+    const name = prompt("資格名を入力してください");
     if(!name) return;
-
     createTab(name);
-
     saveSubjects();
-
 });
 
-// タブ作成
+// タブの作成
 function createTab(name){
-
-    const btn =
-        document.createElement("button");
-
+    const btn = document.createElement("button");
     btn.className = "tab";
     btn.textContent = name;
-
-    tabsContainer.insertBefore(
-        btn,
-        document.querySelector(".add-tab")
-    );
-
+    tabsContainer.insertBefore(btn, document.querySelector(".add-tab"));
     setupTabs();
-
 }
 
-// 資格一覧保存
+// 資格一覧の保存
 function saveSubjects(){
-
-    const subjects = [];
-
-    document
-    .querySelectorAll(".tab:not(.add-tab)")
-    .forEach(tab=>{
-
-        subjects.push(tab.textContent);
-
-    });
-
-    localStorage.setItem(
-        "subjects",
-        JSON.stringify(subjects)
-    );
-
+    const subjects = Array.from(document.querySelectorAll(".tab:not(.add-tab)")).map(tab => tab.textContent);
+    localStorage.setItem("subjects", JSON.stringify(subjects));
 }
 
-// 資格一覧読込
+// 資格一覧の読み込み
 function loadSubjects(){
-
-    const saved =
-        JSON.parse(
-            localStorage.getItem("subjects")
-        );
-
+    const saved = JSON.parse(localStorage.getItem("subjects"));
     if(!saved) return;
 
-    document
-    .querySelectorAll(".tab:not(.add-tab)")
-    .forEach(tab=>tab.remove());
+    document.querySelectorAll(".tab:not(.add-tab)").forEach(tab=>tab.remove());
 
     saved.forEach(subject=>{
-
-        const btn =
-            document.createElement("button");
-
+        const btn = document.createElement("button");
         btn.className = "tab";
-
-        if(subject==="X線"){
-            btn.classList.add("active");
-        }
-
+        if(subject === currentSubject) btn.classList.add("active");
         btn.textContent = subject;
-
-        tabsContainer.insertBefore(
-            btn,
-            document.querySelector(".add-tab")
-        );
-
+        tabsContainer.insertBefore(btn, document.querySelector(".add-tab"));
     });
-
 }
-
 </script>
 
 </body>
