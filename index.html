@@ -71,7 +71,7 @@ h1{
     color: var(--text-muted);
     cursor:pointer;
     transition: all 0.2s ease;
-    white-space: nowrap; /* 文字落ち防止 */
+    white-space: nowrap; 
 }
 
 .tab:hover {
@@ -154,88 +154,56 @@ main{
 }
 
 /* ==========================================
-   🗣️ チャット（キャラクター対話）用のCSS
+   🗣️ チャット（キャラクター対話）用のCSS（★修正＆最適化）
 ========================================== */
 .chat-wrap {
     display: flex;
     flex-direction: column;
-    gap: 24px;          /* 発言と発言の上下の間隔 */
-    margin: 30px 0;     /* チャットエリア全体の上下の余白 */
+    gap: 24px;          
+    margin: 30px 0;     
 }
 
 .chat-row {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-start; /* アイコンと右側コンテンツの上端を揃える */
     gap: 16px;
 }
 
-/* 右側（生徒側）は要素の並び順を逆にする */
-.chat-row.right {
-    flex-direction: row-reverse;
-}
-
-/* 丸いアイコン（今回は絵文字） */
-.chat-avatar {
-    width: 48px;
-    height: 48px;
+/* アイコン画像のスタイル（丸型に切り抜き） */
+.chat-avatar-img {
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: #f1f5f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    flex-shrink: 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    object-fit: cover;
+    flex-shrink: 0; /* 画面が狭くなっても画像が潰れないように固定 */
 }
 
-/* 発言全体の横幅制限 */
-.chat-content {
-    max-width: 75%;
+/* 右側コンテンツ（名前と吹き出しを縦並びにする） */
+.chat-content-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 左揃えにする */
+    gap: 6px;                /* 名前と吹き出しの隙間 */
 }
 
 /* キャラクターの名前 */
 .chat-name {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
-    margin-bottom: 6px;
     font-weight: bold;
 }
 
-.chat-row.right .chat-name {
-    text-align: right;
-}
-
-/* 吹き出しの共通デザイン */
+/* 吹き出し（画像のような青背景に変更） */
 .chat-bubble {
-    padding: 14px 18px;
-    border-radius: 16px;
+    background: #00a2e8; /* 画像に近い鮮やかな水色/青 */
+    color: #ffffff;      /* 白文字 */
+    padding: 12px 20px;
+    border-radius: 12px;
     line-height: 1.6;
     font-size: 15px;
-    position: relative;
+    font-weight: bold;
+    display: inline-block; /* 文字の長さに合わせて横幅を縮める */
 }
-
-/* 左側（先生）専用：薄グレーの背景 ＋ 左上の角を尖らせる */
-.chat-row.left .chat-bubble {
-    
-    background: var(--primary-color);
-    border: 1px solid var(--border-color);
-    border-top-left-radius: 4px; 
-}
-
-/* 右側（生徒）専用：テーマカラーの背景 ＋ 右上の角を尖らせる */
-.chat-row.right .chat-bubble {
-    background: #f8fafc;
-    color: white;
-    border-top-right-radius: 4px; 
-}
-
-/* スマホ表示のとき、吹き出しの横幅を少し広げる（レスポンシブ対応） */
-@media (max-width: 600px) {
-    .chat-content {
-        max-width: 85%;
-    }
-}
-
 
 /* フッター */
 footer{
@@ -270,35 +238,28 @@ footer{
 </footer>
 
 <script>
-// ==========================================
-// 💡 設定エリア：ここだけを編集すればOKです！
-// ==========================================
 const courseData = [
     {
         id: "xray",
-        tabName: "Study",  // ← ここを変えればタブの名前も変わります！
+        tabName: "Study",  
         content: `
             <h2>X線作業主任者</h2>
             <p>これだけ覚えておけば受かる(たぶん)</p>
-            <p></p>
             <ul>
                 <li>あ</li>
                 <li>た</li>
             </ul>
             
             <div class="chat-wrap">
-
-    
-    <div class="chat-row left">
-        <img src="images/IMG_9486.png" style="width: 20%; height: 20%; object-fit: cover;">
-            <div class="chat-name">通りすがりの花海咲季さん</div> <div class="chat-bubble">
-                ここからが本気よ！
+                <div class="chat-row">
+                    <img src="images/IMG_9486.png" class="chat-avatar-img" alt="花海咲季">
+                    
+                    <div class="chat-content-box">
+                        <div class="chat-name">通りすがりの花海咲季さん</div>
+                        <div class="chat-bubble">ここからが本気よ！</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-
-            
         `
     },
     {
@@ -337,58 +298,42 @@ const courseData = [
         `
     }
 ];
-// ==========================================
-// これ以降のシステム部分は自動で動くので編集不要です
-// ==========================================
 
 const tabsContainer = document.getElementById("tabs");
 const contentArea = document.getElementById("contentArea");
 
-// 1. タブを自動生成する関数
 function initializeSite() {
     courseData.forEach((course, index) => {
-        // ボタン要素を作成
         const btn = document.createElement("button");
         btn.className = "tab";
-        btn.textContent = course.tabName; // データからタブ名をセット
+        btn.textContent = course.tabName; 
         
-        // 最初の一つだけ「active」状態にする
         if (index === 0) {
             btn.classList.add("active");
-            loadLesson(course.id); // 最初のコンテンツを表示
+            loadLesson(course.id); 
         }
 
-        // タップした時の動き
         btn.addEventListener("click", () => {
-            // 全てのタブからactiveを外して、クリックしたタブに付ける
             document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
             btn.classList.add("active");
-            
-            // 該当するコンテンツを表示
             loadLesson(course.id);
         });
 
-        // ヘッダーにボタンを追加
         tabsContainer.appendChild(btn);
     });
 }
 
-// 2. 教材データを表示する関数
 function loadLesson(subjectId) {
-    // IDが一致するデータを検索
     const course = courseData.find(item => item.id === subjectId);
-    
     if (course) {
         contentArea.innerHTML = course.content;
     } else {
         contentArea.innerHTML = "<h2>準備中</h2><p>この科目のコンテンツは現在作成中です。</p>";
     }
-    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// サイトを開いた時に実行
-initializeSite();
+window.onload = initializeSite;
 </script>
 
 </body>
