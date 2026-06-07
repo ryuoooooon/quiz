@@ -193,17 +193,42 @@ main{
     font-weight: bold;
 }
 
-/* 吹き出し（画像のような青背景に変更） */
+/* 吹き出し本体（修正） */
 .chat-bubble {
     background: #00a2e8; /* 画像に近い鮮やかな水色/青 */
     color: #ffffff;      /* 白文字 */
     padding: 12px 20px;
-    border-radius: 12px;
+    border-radius: 12px; /* 全体を角丸に */
     line-height: 1.6;
     font-size: 15px;
     font-weight: bold;
-    display: inline-block; /* 文字の長さに合わせて横幅を縮める */
+    display: inline-block; 
+
+    /* ★追加：しっぽの基準位置にするため relative を指定 */
+    position: relative; 
+    
+    /* ★追加：しっぽを作る際、左上の角を尖らせることでしっぽと繋がっているように見せる */
+    border-top-left-radius: 4px;
 }
+
+/* ★追加：吹き出しのしっぽ（突起）部分 */
+.chat-bubble::before {
+    content: ""; /* 擬似要素には必須 */
+    position: absolute;
+    
+    /* 位置の調整：吹き出し本体の左上に配置 */
+    top: -1px;       /* 吹き出しの上端と合わせる */
+    left: -12px;     /* 吹き出しの左側に飛び出させる */
+    
+    /* 三角形を作るトリック：ボーダーを使用 */
+    border-width: 14px 14px 0 0;  /* 三角形のサイズと向き */
+    border-style: solid;
+    border-color: #00a2e8 transparent transparent transparent; /* 背景色と同じ青、他は透明 */
+    
+    /* 綺麗に表示させるための微調整（お好みで） */
+    border-top-right-radius: 4px;
+}
+
 
 /* フッター */
 footer{
